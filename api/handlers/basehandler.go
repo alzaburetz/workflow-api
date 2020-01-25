@@ -17,10 +17,10 @@ type Msg struct {
 }
 
 type DataValidity interface {
-	NotNil() bool
-	HasRequiredFields() (bool, error)
+	HasRequiredFields() error
 }
 
 func InitDatabase(session *mgo.Session) {
 	database = session
 }
+

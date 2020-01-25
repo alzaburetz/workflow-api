@@ -9,8 +9,19 @@ services:
             - './api:/go/src/app'
         depends_on: 
             - 'mongo'
+            - 'redis'
     mongo:
         image: 'mongo:latest'
         container_name: 'mongo'
         ports: 
             - '27100:27017'
+
+
+    redis:
+        image: 'redis:latest'
+        environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+            - ALLOW_EMPTY_PASSWORD=yes
+            - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+        ports:
+            - '6379:6379'
