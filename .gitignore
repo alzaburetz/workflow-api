@@ -3,3 +3,4 @@ api/https-server.key
 api/https-server.crt
 .docker-compose.yml.swp
 .idea/
+api/static/*

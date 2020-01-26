@@ -25,13 +25,13 @@ func CreateToken(login string) (string, error) {
 	return token.String(), err
 }
 
-func CheckToken(r *http.Request) (err error) {
+func CheckToken(r *http.Request) (error, string) {
 	token := r.Header.Get("Token")
 	if (len(token) > 0) {
-		test, _ := conn.Do("GET",token)
-		return errors.New(fmt.Sprintf("%v", test))
+		user, _ := conn.Do("GET",token)
+		return nil, fmt.Sprintf("%s", user)
 	} else {
-		return errors.New("")
+		return errors.New("Token invalid"), ""
 	}
 }
 

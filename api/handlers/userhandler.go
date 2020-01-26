@@ -36,6 +36,8 @@ func (ua UserAuth)HasRequiredFields() error {
 		return errors.New("Email not valid")
 	} else if len(ua.Phone) < 11 {
 		return errors.New("Phone is invalid")
+	} else if len(ua.Password) < 5{
+		return errors.New("Password is invalid or missing")
 	} else {
 		return nil
 	}
@@ -54,16 +56,22 @@ func (u User)HasRequiredFields()  error {
 	}
 }
 
+//Gets user by token
 func GetUser(w http.ResponseWriter, r *http.Request) {
-	if err := middleware.CheckToken(r); err == nil {
-		json.NewEncoder(w).Encode(Msg{Message: "Hooray, you passed middleware"})
+	if err, userKey := middleware.CheckToken(r); err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		WriteAnswer(&w, err.Error(), []string{"Wrong token, try relogin"}, 403)
 	} else {
-		json.NewEncoder(w).Encode(Msg{Message: err.Error()})
+		w.WriteHeader(http.StatusOK)
+
+		var user User
+		var db = AccessDataStore()
+		db.db.DB("app").C("Users").Find(bson.M{"email":userKey}).One(&user)
+		WriteAnswer(&w, user, []string{}, 200)
 	}
 }
 
-
-//TODO: Check for existing user before overwriting one
+//Handle register
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	var auth *UserAuth
 	data, err := ioutil.ReadAll(r.Body)
@@ -100,65 +108,67 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(message)
 		} else {
 			//FULL SUCCESS GO AHEAD AND CREATE USER, HOORAY
-			var user User
-			user.Id, _ = database.DB("app").C("Users").Count()
-			user.UserCreated = time.Now()
-			user.Name = auth.Name
-			user.Email = auth.Email
-			user.Phone = auth.Phone
-			database.DB("app").C("Users").Insert(user)
-
-
-			//Save user credentials 
-			//Hash password
-			passwd, err := bcrypt.GenerateFromPassword([]byte(auth.Password), bcrypt.DefaultCost)
-			if err != nil {
-				
+			
+			//This part checks if user aready exists
+			var userExists User
+			database.DB("app").C("Users").Find(bson.M{"$or" :[]bson.M{ bson.M{"email": auth.Email}, bson.M{"phone":auth.Phone}}}).One(&userExists)
+			if userExists.Email != "" || userExists.Phone != "" { //if user is found, return error
+				w.WriteHeader(http.StatusBadRequest)
+				WriteAnswer(&w, "", []string {"User already exists"},400)
+				return
+			} else { //if user is new, we save it
+				var user User
+				user.Id, _ = database.DB("app").C("Users").Count()
+				user.UserCreated = time.Now()
+				user.Name = auth.Name
+				user.Email = auth.Email
+				user.Phone = auth.Phone
+				database.DB("app").C("Users").Insert(user)
+	
+	
+				//Save user credentials 
+				//Hash password
+				passwd, _ := bcrypt.GenerateFromPassword([]byte(auth.Password), bcrypt.DefaultCost)
+				auth.Password = string(passwd)
+				database.DB("app").C("Credentials").Insert(auth)
+	
+				w.WriteHeader(http.StatusOK)
+				var er = make([]string, 0)
+				var resp = Resp {
+					Code: 200,
+					Errors: er,
+					Response: user,
+				}
+				json.NewEncoder(w).Encode(resp)
 			}
-			auth.Password = string(passwd)
-			database.DB("app").C("Credentials").Insert(auth)
-
-			w.WriteHeader(http.StatusOK)
-			var er = make([]string, 0)
-			var resp = Resp {
-				Code: 200,
-				Errors: er,
-				Response: user,
-			}
-			json.NewEncoder(w).Encode(resp)
+			
 		}
 	}
 }
 
+
+//Handles login
 func Login(w http.ResponseWriter, r *http.Request) {
 	var auth UserAuth
 	var resp Resp
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		resp.Code = 400
-		resp.Response = ""
-		json.NewEncoder(w).Encode(resp)
+		WriteAnswer(&w, "", []string {"Couldn't read data from post form", "Expecing json"}, 400)
 		return
 	}
 
 	if err = json.Unmarshal(data, &auth); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		resp.Code = 400
-		resp.Response = ""
-		json.NewEncoder(w).Encode(resp)
+		WriteAnswer(&w, "", []string{"Couldn't unmarshal data", err.Error(), "Expecting 'email', 'password' fields"}, 400)
 		return
 	}
 
 	var userExists UserAuth
 	database.DB("app").C("Credentials").Find(bson.M{"email": auth.Email}).One(&userExists)
 	if userExists.Email == "" {
-		er := make([]string, 1)
-		er[0] = "User doesn't exist!"
 		w.WriteHeader(http.StatusBadRequest)
-		resp.Code = 400
-		resp.Errors = er
-		json.NewEncoder(w).Encode(resp)
+		WriteAnswer(&w, "", []string{"Couldn't login", "User doesn't exist"}, 400)
 		return
 	}
 
@@ -166,22 +176,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(userExists.Password),[]byte(auth.Password))
 	if err != nil {
-		er := make([]string, 1)
-		er[0] = "Password is incorrect!"
 		w.WriteHeader(http.StatusUnauthorized)
-		resp.Code = 401
-		resp.Errors = er
-		json.NewEncoder(w).Encode(resp)
+		WriteAnswer(&w, "", []string{"Password is incorrect"}, 401)
 		return
 	} else {
 		token, err := middleware.CreateToken(auth.Email)
 		if err != nil {
-			er := make([]string, 1)
-			er[0] = "Error creating token"
 			w.WriteHeader(http.StatusInternalServerError)
-			resp.Code = 500
-			resp.Errors = er
-			json.NewEncoder(w).Encode(resp)
+			WriteAnswer(&w, "", []string{"Error creating token"}, 500)
 			return
 		} else {
 			resp.Code= 200
@@ -192,65 +194,4 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-}
-
-//This function Handles creation of user from data provided via json from request
-//For admin and testing purposes only
-func CreateUser(w http.ResponseWriter, r *http.Request) {
-		data, err := ioutil.ReadAll(r.Body)
-		//Handle error of reading data from request body
-		if err != nil {
-			message := Msg {
-				Message: "Could not read data from request",
-				Reason: err.Error(),
-			}
-			json.NewEncoder(w).Encode(message)
-		} else {
-			var user User
-			if err = json.Unmarshal(data, &user); err != nil {
-				message := Msg {
-					Message: "Could not unmarshal json data",
-					Reason: err.Error(),
-				}
-				json.NewEncoder(w).Encode(message)
-			} else {
-				//Check if data correct
-				err = user.HasRequiredFields()
-				if err != nil {
-					message := Msg {
-						Message: "Wrong data provided",
-						Reason: err.Error(),
-					}
-					json.NewEncoder(w).Encode(message)
-				} else {
-					user.Id, _ = database.DB("app").C("Users").Count()
-					user.UserCreated = time.Now()
-					database.DB("app").C("Users").Insert(user)
-					message := Msg {
-						Message: "Successfully inserted data",
-						Reason: "",
-					}
-					json.NewEncoder(w).Encode(message)
-				}
-			}
-		}
-}
-
-//This function handles listing of all users
-func ListUsers(w http.ResponseWriter, r *http.Request) {
-	users := []User{}
-	if err := database.DB("app").C("Users").Find(nil).All(&users); err != nil {
-		message := Msg {
-			Message: "Error getting data",
-			Reason: err.Error(),
-		}
-		json.NewEncoder(w).Encode(message)
-	}
-	var errors []string
-	response := Resp {
-		200,
-		errors,
-		&users,
-	}
-	json.NewEncoder(w).Encode(response)
 }
