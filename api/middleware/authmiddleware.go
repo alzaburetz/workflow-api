@@ -25,6 +25,11 @@ func CreateToken(login string) (string, error) {
 	return token.String(), err
 }
 
+func UpdateToken(login, token string) error {
+	_, err := conn.Do("SET", token, login)
+	return err
+}
+
 func CheckToken(r *http.Request) (error, string) {
 	token := r.Header.Get("Token")
 	if (len(token) > 0) {

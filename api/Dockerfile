@@ -12,6 +12,7 @@ COPY . .
 # RUN dep ensure -add "go.mongodb.org/mongo-driver/mongo"
 RUN go get gopkg.in/mgo.v2
 RUN go get -u github.com/gorilla/mux
+RUN go get -u github.com/gorilla/handlers
 RUN go get github.com/pilu/fresh
 RUN go get github.com/gomodule/redigo/redis
 RUN go get github.com/satori/go.uuid
