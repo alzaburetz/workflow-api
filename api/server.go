@@ -14,7 +14,7 @@ func (s *server) Server() {
 	s.httpServer = CreateHTTPServer()
 	db, err := mgo.Dial("mongo:27017")
 	if err != nil {
-		panic("Could not resolve connection to database")
+		//panic("Could not resolve connection to database")
 	}
 	s.db = db
 }
