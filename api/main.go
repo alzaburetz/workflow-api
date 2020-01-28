@@ -4,12 +4,14 @@ import ("log"
 		"os"
 		"app/handlers"
 		handl "github.com/gorilla/handlers"
+		. "runtime"
 		"app/middleware"
 		"net/http")
 
 var s server
 
 func main() {
+	_ = GOMAXPROCS(10)
 	s.Server()
 	handlers.InitDatabase(s.db)
 	if err := middleware.RedisInit(); err != nil {
