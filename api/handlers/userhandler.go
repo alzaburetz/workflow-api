@@ -5,12 +5,12 @@ import ("time"
 		"errors")
 
 type User struct {
-	Id int `json:"id" bson:"_id_"`
+	Id int `json:"-" bson:"_id_"`
 	Name string `json:"name" bson:"name"`
 	Surname string `json:"surname" bson:"surname"`
 	Workdays int `json:"workdays" bson:"workdays"`
 	Weekdays int `json:"weekdays" bson:"weekdays"`
-	FirstWorkDay time.Time `json:"firstwork" bson:"firstwork"`
+	FirstWorkDay string `json:"firstwork" bson:"firstwork"`
 	UserCreated time.Time `json:"-" bson:"created"`
 	Email string `json:"email" bson:"email"`
 	Phone string `json:"phone" bson:"phone"`

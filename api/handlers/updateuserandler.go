@@ -42,6 +42,8 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	userUpdated.Id = current.Id
 	userUpdated.UserCreated = current.UserCreated
 
+	
+
 	err = db.DB("app").C("Users").Update(current, userUpdated)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
