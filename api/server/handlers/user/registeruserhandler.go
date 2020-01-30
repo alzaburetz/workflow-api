@@ -1,9 +1,10 @@
-package handlers
+package user
 
 import ("net/http"
 		"io/ioutil"
 		"time"
 		"gopkg.in/mgo.v2/bson"
+		. "app/server/handlers"
 		"golang.org/x/crypto/bcrypt"
 		"encoding/json")
 
@@ -47,7 +48,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 			
 			//This part checks if user aready exists
 			var userExists User
-			var database = AccessDataStore().db
+			var database = AccessDataStore()
 			defer database.Close()
 			database.DB("app").C("Users").Find(bson.M{"$or" :[]bson.M{ bson.M{"email": auth.Email}, bson.M{"phone":auth.Phone}}}).One(&userExists)
 			if userExists.Email != "" || userExists.Phone != "" { //if user is found, return error

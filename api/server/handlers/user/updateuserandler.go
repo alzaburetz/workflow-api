@@ -1,8 +1,9 @@
-package handlers 
+package user
 
 import ("net/http"
 		"io/ioutil"
-		. "app/middleware"
+		. "app/server/middleware"
+		. "app/server/handlers"
 		"gopkg.in/mgo.v2/bson"
 		"encoding/json")
 
@@ -33,7 +34,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	var db = AccessDataStore().db
+	var db = AccessDataStore()
 	defer db.Close()
 
 	var current User

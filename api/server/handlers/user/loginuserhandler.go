@@ -1,8 +1,9 @@
-package handlers
+package user
 
 import ("net/http"
 		"io/ioutil"
-		. "app/middleware"
+		. "app/server/middleware"
+		. "app/server/handlers"
 		"gopkg.in/mgo.v2/bson"
 		"golang.org/x/crypto/bcrypt"
 		"encoding/json")
@@ -24,7 +25,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var userExists UserAuth
-	var db = AccessDataStore().db
+	var db = AccessDataStore()
 	defer db.Close()
 	db.DB("app").C("Credentials").Find(bson.M{"email": auth.Email}).One(&userExists)
 	if userExists.Email == "" {

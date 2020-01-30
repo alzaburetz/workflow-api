@@ -1,7 +1,8 @@
-package main
+package server
 
 import ("github.com/gorilla/mux"
-		. "app/handlers"
+		. "app/server/handlers/user"
+		_ "app/server/middleware"
 		"net/http")
 
 
@@ -9,7 +10,6 @@ func CreateRouter() *mux.Router{
 	var r = mux.NewRouter()
 	r.Use(commonMiddleware)
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-	r.HandleFunc("/uploadfile", UploadFile)
 
 	var api = r.PathPrefix("/api").Subrouter()
 	api.HandleFunc("/user", GetUser).Methods("GET")
@@ -18,9 +18,9 @@ func CreateRouter() *mux.Router{
 	api.HandleFunc("/user/update", UpdateUser).Methods("POST")
 	api.HandleFunc("/user/find", FindUsers).Methods("GET")
 
-	var admin = r.PathPrefix("/admin").Subrouter()
-	admin.HandleFunc("/wipe/{name}", DropDB)
-	admin.HandleFunc("/get", GetAll)
+	// var admin = r.PathPrefix("/admin").Subrouter()
+	// admin.HandleFunc("/wipe/{name}", DropDB)
+	// admin.HandleFunc("/get", GetAll)
 	return r
 }
 

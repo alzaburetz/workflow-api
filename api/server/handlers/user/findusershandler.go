@@ -1,7 +1,8 @@
-package handlers
+package user
 
 import ("net/http"
 		"encoding/json"
+		. "app/server/handlers"
 		"gopkg.in/mgo.v2/bson"
 		"io/ioutil")
 
@@ -21,7 +22,7 @@ func FindUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var db = AccessDataStore().db
+	var db = AccessDataStore()
 	defer db.Close()
 
 	iter := db.DB("app").C("Users").Find(bson.M{"phone":bson.M{"$in":phones}}).Iter();

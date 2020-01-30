@@ -25,8 +25,8 @@ func InitDatabase(session *mgo.Session) {
 	database = session
 }
 
-func AccessDataStore() *DataBase {
-	return &DataBase{database.Copy()}
+func AccessDataStore() *mgo.Session {
+	return database.Copy()
 }
 
 func WriteAnswer(w *http.ResponseWriter, msg interface{}, httperrors []string, code int) error {

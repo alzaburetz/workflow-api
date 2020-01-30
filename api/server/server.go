@@ -1,20 +1,20 @@
- package main
+ package server
 
 import ("time"
 		"crypto/tls"
 		"gopkg.in/mgo.v2"
 		"net/http")
 
-type server struct {
-	httpServer *http.Server
+type Server struct {
+	HTTP *http.Server
 	db *mgo.Session
 }
 
-func (s *server) Server() {
-	s.httpServer = CreateHTTPServer()
+func (s *Server) ServerNew() {
+	s.HTTP= CreateHTTPServer()
 	db, err := mgo.Dial("mongo:27017")
 	if err != nil {
-		//panic("Could not resolve connection to database")
+		panic("Could not resolve connection to database")
 	}
 	s.db = db
 }

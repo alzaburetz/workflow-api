@@ -4,3 +4,4 @@ api/https-server.crt
 .docker-compose.yml.swp
 .idea/
 api/static/*
+api/.vscode/*
