@@ -19,7 +19,7 @@ func RedisInit() error {
 
 func CreateToken(login string) (string, error) {
 	token, err := uuid.NewV4()
-	
+	AccessRedis()
 	_, err = conn.Do("SET", token, login)
 	
 	return token.String(), err
@@ -40,14 +40,25 @@ func CheckToken(r *http.Request) (error, string) {
 	}
 }
 
-// func AuthMiddleware(next http.Handler) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		token := r.Header.Get("Token")
-// 		if (len(token) == 0) {
-// 			http.Error(w, http.StatusText(403), 403)
-// 			return
-// 		} else {
-// 			next.ServeHTTP(w,r)
-// 		}
-// 	}
-// }
+func AccessRedis() {
+	if conn == nil {
+		_ = RedisInit()
+	}
+}
+
+func AuthMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/api/user/login" || r.URL.Path == "/api/user/register" {
+			next.ServeHTTP(w,r)
+			return
+		}
+		token := r.Header.Get("Token")
+		
+		if (len(token) == 0) {
+			http.Error(w, http.StatusText(403), 403)
+			return
+		} else {
+			next.ServeHTTP(w,r)
+		}
+	})
+}
