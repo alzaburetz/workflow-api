@@ -22,8 +22,11 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		}
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(message)
-	} else {
-		if err = json.Unmarshal(data, &auth); err != nil {
+		return
+	} 
+
+	
+	if err = json.Unmarshal(data, &auth); err != nil {
 			errs := make([]string, 1)
 			errs[0] = "Could not unmarshal json data"
 			message := Resp {
@@ -33,7 +36,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 			}
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(message)
-		} else if err = auth.HasRequiredFields(); err != nil {
+			return
+		}
+		
+	if err = auth.HasRequiredFields(); err != nil {
 			errs := make([]string, 1)
 			errs[0] = err.Error()
 			message := Resp {
@@ -43,22 +49,26 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 			}
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(message)
-		} else {
+			return
+		}
+		
 			//FULL SUCCESS GO AHEAD AND CREATE USER, HOORAY
 			
 			//This part checks if user aready exists
 			var userExists User
 			var database = AccessDataStore()
+			
 			defer database.Close()
 			database.DB("app").C("Users").Find(bson.M{"$or" :[]bson.M{ bson.M{"email": auth.Email}, bson.M{"phone":auth.Phone}}}).One(&userExists)
 			if userExists.Email != "" || userExists.Phone != "" { //if user is found, return error
 				w.WriteHeader(http.StatusBadRequest)
 				WriteAnswer(&w, "", []string {"User already exists"},400)
 				return
-			} else { //if user is new, we save it
+			} 
+			
 				var user User
 				user.Id, _ = database.DB("app").C("Users").Count()
-				user.UserCreated = time.Now()
+				user.UserCreated = time.Now().Unix()
 				user.Name = auth.Name
 				user.Email = auth.Email
 				user.Phone = auth.Phone
@@ -79,8 +89,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 					Response: user,
 				}
 				json.NewEncoder(w).Encode(resp)
-			}
-			
-		}
-	}
+
+		
+	
 }
