@@ -2,7 +2,8 @@ package server
 
 import ("github.com/gorilla/mux"
 		. "app/server/handlers/user"
-		_ "app/server/middleware"
+		. "app/server/handlers/group"
+		. "app/server/middleware"
 		"net/http")
 
 
@@ -12,11 +13,17 @@ func CreateRouter() *mux.Router{
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	var api = r.PathPrefix("/api").Subrouter()
-	api.HandleFunc("/user", GetUser).Methods("GET")
-	api.HandleFunc("/user/register", RegisterUser).Methods("POST")
-	api.HandleFunc("/user/login", Login).Methods("POST")
-	api.HandleFunc("/user/update", UpdateUser).Methods("POST")
-	api.HandleFunc("/user/find", FindUsers).Methods("GET")
+	api.Use(AuthMiddleware)
+
+	var user = api.PathPrefix("/user").Subrouter()
+	user.HandleFunc("", GetUser).Methods("GET")
+	user.HandleFunc("/register", RegisterUser).Methods("POST")
+	user.HandleFunc("/login", Login).Methods("POST")
+	user.HandleFunc("/update", UpdateUser).Methods("PUT")
+	user.HandleFunc("/find", FindUsers).Methods("GET")
+
+	var group = api.PathPrefix("/group").Subrouter()
+	group.HandleFunc("/create", CreateGroup).Methods("POST")
 
 	// var admin = r.PathPrefix("/admin").Subrouter()
 	// admin.HandleFunc("/wipe/{name}", DropDB)
