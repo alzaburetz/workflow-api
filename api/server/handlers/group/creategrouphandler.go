@@ -34,7 +34,7 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 	err, user := CheckToken(r) 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		WriteAnswer(&w, nil, []string{ err.Error()}, 500)
+		WriteAnswer(&w, nil, []string{"Error getting token", err.Error()}, 500)
 		return
 	}
 
@@ -44,7 +44,7 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 	var creator User
 	if err = database.DB("app").C("Users").Find(bson.M{"email":user}).One(&creator); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		WriteAnswer(&w, nil, []string{ err.Error()}, 500)
+		WriteAnswer(&w, nil, []string{"Database error", "Error checking user", err.Error()}, 500)
 		return
 	}
 
@@ -54,7 +54,17 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 
 	if err = database.DB("app").C("Groups").Insert(group); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		WriteAnswer(&w, nil, []string{ err.Error()}, 500)
+		WriteAnswer(&w, nil, []string{"Database error", "Error inserting data", err.Error()}, 500)
+		return
+	}
+
+	var updateduser User
+	updateduser = creator
+	updateduser.Groups = append(updateduser.Groups, group.Id)
+
+	if err = database.DB("app").C("Users").Update(creator, updateduser); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		WriteAnswer(&w, nil, []string{"Database error", "Error updating userdata", err.Error()}, 500)
 		return
 	}
 
