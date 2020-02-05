@@ -5,7 +5,7 @@ import (. "app/server/handlers/user"
 
 type Post struct {
 	Id int `json:"id" bson:"_id_:`
-	Author *User `json:"author" bson:"author"`
+	Author User `json:"author" bson:"author"`
 	Name string `json:"name" bson:"name"`
 	Body string `json:"body" bson:"body"`
 	Timestamp int64 `json:"timestamp" bson:"timestamp"`

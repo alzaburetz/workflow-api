@@ -10,7 +10,7 @@ type Group struct {
 	Name string `json:"name" bson:"name"`
 	Description string `json:"description" bson:"description"`
 	UserCount int `json:"usercount" bson:"usercount"`
-	Posts []*Post
+	Posts []Post `json:"posts" bson:"posts"`
 }
 
 func (gr *Group)HasRequiredFields() error {
