@@ -17,15 +17,14 @@ type Resp struct {
 	Response interface{} `json:"response"`
 }
 
-type DataValidity interface {
-	HasRequiredFields() error
-}
-
 func InitDatabase(session *mgo.Session) {
 	database = session
 }
 
 func AccessDataStore() *mgo.Session {
+	if database == nil {
+		database, _ = mgo.Dial("mongo:27017")
+	}
 	return database.Copy()
 }
 
