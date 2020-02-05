@@ -12,11 +12,6 @@ type Server struct {
 
 func (s *Server) ServerNew() {
 	s.HTTP= CreateHTTPServer()
-	db, err := mgo.Dial("mongo:27017")
-	if err != nil {
-		panic("Could not resolve connection to database")
-	}
-	s.db = db
 }
 
 func CreateHTTPServer() *http.Server  {
