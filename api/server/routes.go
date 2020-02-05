@@ -4,12 +4,23 @@ import ("github.com/gorilla/mux"
 		. "app/server/handlers/user"
 		. "app/server/handlers/group"
 		. "app/server/middleware"
+		"encoding/json"
 		"net/http")
 
+var r *mux.Router
+
+type Routes struct {
+	Paths []string `json:"avaliable_routes"`
+}
 
 func CreateRouter() *mux.Router{
-	var r = mux.NewRouter()
+	r = mux.NewRouter()
 	r.Use(commonMiddleware)
+	r.HandleFunc("/", func (w http.ResponseWriter, r *http.Request)  {
+		var routes Routes
+		routes.Paths = GetRoutes()
+		json.NewEncoder(w).Encode(routes)
+	})
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	var api = r.PathPrefix("/api").Subrouter()
@@ -36,4 +47,17 @@ func commonMiddleware(next http.Handler) http.Handler {
         w.Header().Add("Content-Type", "application/json")
         next.ServeHTTP(w, r)
     })
+}
+
+func GetRoutes() []string {
+	var routes []string
+	r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+        t, err := route.GetPathTemplate()
+        if err != nil {
+            return err
+        }
+		routes = append(routes, t)
+		return nil
+	})
+	return routes
 }
