@@ -1,7 +1,6 @@
 package user
 
-import ("time"
-		"strings"
+import ("strings"
 		"errors")
 
 type User struct {
@@ -11,9 +10,10 @@ type User struct {
 	Workdays int `json:"workdays" bson:"workdays"`
 	Weekdays int `json:"weekdays" bson:"weekdays"`
 	FirstWorkDay string `json:"firstwork" bson:"firstwork"`
-	UserCreated time.Time `json:"-" bson:"created"`
+	UserCreated int64 `json:"-" bson:"created"`
 	Email string `json:"email" bson:"email"`
 	Phone string `json:"phone" bson:"phone"`
+	Groups []int `json:"groups" bson:"groups"`
 }
 
 type UserAuth struct {
