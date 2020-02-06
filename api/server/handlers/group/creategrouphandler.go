@@ -48,23 +48,25 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	group.Creator = creator
-	group.Id, _ = database.DB("app").C("Groups").Count()
-	group.UserCount = 1
-
-	if err = database.DB("app").C("Groups").Insert(group); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		WriteAnswer(&w, nil, []string{"Database error", "Error inserting data", err.Error()}, 500)
-		return
-	}
 
 	var updateduser User
 	updateduser = creator
+	group.Id, _ = database.DB("app").C("Groups").Count()
 	updateduser.Groups = append(updateduser.Groups, group.Id)
 
 	if err = database.DB("app").C("Users").Update(creator, updateduser); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Database error", "Error updating userdata", err.Error()}, 500)
+		return
+	}
+
+
+	creator.Groups = nil
+	group.Creator = creator
+	group.UserCount = 1
+	if err = database.DB("app").C("Groups").Insert(group); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		WriteAnswer(&w, nil, []string{"Database error", "Error inserting data", err.Error()}, 500)
 		return
 	}
 
