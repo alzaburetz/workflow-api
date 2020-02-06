@@ -26,12 +26,14 @@ func CreateToken(login string) (string, error) {
 }
 
 func UpdateToken(login, token string) error {
+	AccessRedis()
 	_, err := conn.Do("SET", token, login)
 	return err
 }
 
 func CheckToken(r *http.Request) (error, string) {
 	token := r.Header.Get("Token")
+	AccessRedis()
 	if (len(token) > 0) {
 		user, _ := conn.Do("GET",token)
 		return nil, fmt.Sprintf("%s", user)
