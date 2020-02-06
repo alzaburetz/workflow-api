@@ -35,6 +35,8 @@ func CreateRouter() *mux.Router{
 
 	var group = api.PathPrefix("/group").Subrouter()
 	group.HandleFunc("/create", CreateGroup).Methods("POST")
+	group.HandleFunc("/{id}", GetGroup).Methods("GET")
+	group.HandleFunc("/{id}/update", UpdateGroup).Methods("PUT")
 
 	// var admin = r.PathPrefix("/admin").Subrouter()
 	// admin.HandleFunc("/wipe/{name}", DropDB)
