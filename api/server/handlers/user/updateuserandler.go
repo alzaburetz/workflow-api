@@ -43,9 +43,10 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	userUpdated.Id = current.Id
 	userUpdated.UserCreated = current.UserCreated
 
-	
+	// WriteAnswer(&w, current, []string{},200)
+	// return
 
-	err = db.DB("app").C("Users").Update(current, userUpdated)
+	err = db.DB("app").C("Users").Update(bson.M{"email":userKey}, userUpdated)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, "", []string{"Error updating data in database", err.Error()}, 500)
