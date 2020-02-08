@@ -30,6 +30,11 @@ func GetGroup(w http.ResponseWriter, r *http.Request) {
 		WriteAnswer(&w, nil, []string{"Database error", "Error getting group from database", err.Error()}, 500)
 		return
 	}
+	if err = database.DB("app").C("Posts").Pipe([]bson.M{bson.M{"$match": bson.M{"group_id":id}}, bson.M{"$limit":2}}).All(&group.Posts); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		WriteAnswer(&w, nil, []string{"Database error", "Error getting posts from database", err.Error()}, 500)
+		return
+	}
 	w.WriteHeader(http.StatusOK)
 	WriteAnswer(&w, group, []string{}, 200)
 }
