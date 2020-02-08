@@ -4,6 +4,7 @@ import ("net/http"
 		"gopkg.in/mgo.v2/bson"
 		"io/ioutil"
 		"encoding/json"
+		"github.com/satori/go.uuid"
 		. "app/server/middleware"
 		. "app/server/handlers"
 		. "app/server/handlers/user")
@@ -51,10 +52,12 @@ func CreateGroup(w http.ResponseWriter, r *http.Request) {
 
 	var updateduser User
 	updateduser = creator
-	group.Id, _ = database.DB("app").C("Groups").Count()
+
+	token, _ := uuid.NewV4()
+	group.Id = token.String()
 	updateduser.Groups = append(updateduser.Groups, group.Id)
 
-	if err = database.DB("app").C("Users").Update(creator, updateduser); err != nil {
+	if err = database.DB("app").C("Users").Update(bson.M{"email":user}, bson.M{"$addToSet":bson.M{"groups":group.Id}}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Database error", "Error updating userdata", err.Error()}, 500)
 		return
