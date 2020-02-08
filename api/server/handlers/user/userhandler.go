@@ -4,7 +4,7 @@ import ("strings"
 		"errors")
 
 type User struct {
-	Id int `json:"-" bson:"_id_"`
+	Id string `json:"-" bson:"_id_"`
 	Name string `json:"name" bson:"name"`
 	Surname string `json:"surname" bson:"surname"`
 	Workdays int `json:"workdays" bson:"workdays"`
@@ -13,7 +13,7 @@ type User struct {
 	UserCreated int64 `json:"-" bson:"created"`
 	Email string `json:"email" bson:"email"`
 	Phone string `json:"phone" bson:"phone"`
-	Groups []int `json:"groups" bson:"groups"`
+	Groups []string `json:"groups" bson:"groups"`
 }
 
 type UserAuth struct {
