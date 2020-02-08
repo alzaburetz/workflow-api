@@ -1,6 +1,6 @@
 package util
 
-func Contains(slice []int, val int) bool {
+func Contains(slice []string, val string) bool {
 	for _, i := range slice {
 		if i == val {
 			return true
