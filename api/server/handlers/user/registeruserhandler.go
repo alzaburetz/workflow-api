@@ -5,6 +5,7 @@ import ("net/http"
 		"time"
 		"gopkg.in/mgo.v2/bson"
 		. "app/server/handlers"
+		"github.com/satori/go.uuid"
 		"golang.org/x/crypto/bcrypt"
 		"encoding/json")
 
@@ -65,9 +66,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 				WriteAnswer(&w, "", []string {"User already exists"},400)
 				return
 			} 
-			
+		token, err := uuid.NewV4()
+
 				var user User
-				user.Id, _ = database.DB("app").C("Users").Count()
+				user.Id = token.String()
 				user.UserCreated = time.Now().Unix()
 				user.Name = auth.Name
 				user.Email = auth.Email

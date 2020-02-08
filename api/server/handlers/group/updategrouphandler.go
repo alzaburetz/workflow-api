@@ -2,7 +2,6 @@ package group
 
 import ("net/http"
 		"gopkg.in/mgo.v2/bson"
-		"strconv"
 		"io/ioutil"
 		"github.com/gorilla/mux"
 		"encoding/json"
@@ -13,11 +12,6 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var id int
 	groupvar, _ := muxvars["id"]
-	if id, err = strconv.Atoi(groupvar); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		WriteAnswer(&w, nil, []string{err.Error()}, 400)
-		return
-	}
 
 	var body []byte
 	if body, err = ioutil.ReadAll(r.Body); err != nil {
@@ -50,7 +44,7 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var updated Group
-	database.DB("app").C("Groups").Find(bson.M{"_id_":id}).One(&updated)
+	database.DB("app").C("Groups").Find(bson.M{"_id_":groupvar}).One(&updated)
 
 	w.WriteHeader(http.StatusOK)
 	WriteAnswer(&w, updated, []string{},200)

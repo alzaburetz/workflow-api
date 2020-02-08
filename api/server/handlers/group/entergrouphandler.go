@@ -5,7 +5,6 @@ import (. "app/server/handlers"
 		. "app/server/middleware"
 		. "app/util"
 		"gopkg.in/mgo.v2/bson"
-		"strconv"
 		"github.com/gorilla/mux"
 		"net/http")
 
@@ -15,13 +14,6 @@ func EnterGroup(w http.ResponseWriter, r *http.Request) {
 	if !converted {
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, nil, []string{"Error getting variable from url", "Usage: /group/{id}/enter"}, 400)
-		return
-	}
-
-	id, err := strconv.Atoi(idvar)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		WriteAnswer(&w, nil, []string{"Error converting variable to int", err.Error()}, 400)
 		return
 	}
 
@@ -43,20 +35,20 @@ func EnterGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if Contains(usr.Groups, id) {
+	if Contains(usr.Groups, idvar) {
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, nil,[]string{"User already in group"}, 400)
 		return
 	}
 
-	err = database.DB("app").C("Users").Update(bson.M{"email":user}, bson.M{"$addToSet": bson.M{"groups":id}})
+	err = database.DB("app").C("Users").Update(bson.M{"email":user}, bson.M{"$addToSet": bson.M{"groups":idvar}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updating user", err.Error()},500)
 		return
 	}
 
-	err = database.DB("app").C("Groups").Update(bson.M{"_id_": id}, bson.M{"$inc":bson.M{"usercount":1}})
+	err = database.DB("app").C("Groups").Update(bson.M{"_id_": idvar}, bson.M{"$inc":bson.M{"usercount":1}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updating group", err.Error()},500)

@@ -6,7 +6,7 @@ import (. "app/server/handlers/user"
 
 type Group struct {
 	Creator User `json:"creator" bson:"creator"`
-	Id int `json:"id" bson:"_id_"`
+	Id string `json:"id" bson:"_id_"`
 	Name string `json:"name" bson:"name"`
 	Description string `json:"description" bson:"description"`
 	UserCount int `json:"usercount" bson:"usercount"`

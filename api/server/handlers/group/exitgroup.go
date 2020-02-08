@@ -1,7 +1,6 @@
 package group
 
 import ("net/http"
-		"strconv"
 		. "app/server/handlers"
 		. "app/server/middleware"
 		. "app/server/handlers/user"
@@ -18,12 +17,6 @@ func ExitGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := strconv.Atoi(muxid)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		WriteAnswer(&w, nil, []string{"Error converting to int", err.Error()}, 500)
-		return
-	}
 
 	var user User
 	err, email := CheckToken(r)
@@ -43,20 +36,20 @@ func ExitGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !Contains(user.Groups, id) {
+	if !Contains(user.Groups, muxid) {
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, nil, []string{"User already exited group!"}, 400)
 		return
 	}
 
-	err = database.DB("app").C("Users").Update(bson.M{"email":email}, bson.M{"$pull": bson.M{"groups":id}})
+	err = database.DB("app").C("Users").Update(bson.M{"email":email}, bson.M{"$pull": bson.M{"groups":muxvar}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updating user", err.Error()}, 500)
 		return
 	}
 
-	err = database.DB("app").C("Groups").Update(bson.M{"_id_":id}, bson.M{"$inc": bson.M{"usercount": -1}})
+	err = database.DB("app").C("Groups").Update(bson.M{"_id_":muxvar}, bson.M{"$inc": bson.M{"usercount": -1}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updating group", err.Error()}, 500)

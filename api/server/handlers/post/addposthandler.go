@@ -3,21 +3,15 @@ package post
 import ("net/http"
 		. "app/server/handlers"
 		. "app/server/middleware"
-		"strconv"
 		"gopkg.in/mgo.v2/bson"
 		"encoding/json"
 		"io/ioutil"
 		"time"
+		"github.com/satori/go.uuid"
 		"github.com/gorilla/mux")
 
 func AddPost(w http.ResponseWriter, r *http.Request) {
 	groupid, _ := mux.Vars(r)["id"]
-	id, err := strconv.Atoi(groupid)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		WriteAnswer(&w, nil, []string{"Error getting group id", err.Error()}, 400)
-		return
-	}
 
 	var post Post 
 	body, err := ioutil.ReadAll(r.Body)
@@ -54,11 +48,11 @@ func AddPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	post.GroupID = id
+	post.GroupID = groupid
 	post.Timestamp = time.Now().Unix()
-	count, _ := database.DB("app").C("Posts").Find(bson.M{"group_id":id}).Count()
-	post.Id = count
-
+	//count, _ := database.DB("app").C("Posts").Find(bson.M{"group_id":id}).Count()
+	PostUUID, err := uuid.NewV4()
+	post.Id = PostUUID.String()
 	if err = database.DB("app").C("Posts").Insert(post); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error inserting data to the collection"}, 500)
