@@ -3,6 +3,7 @@ package server
 import ("github.com/gorilla/mux"
 		. "app/server/handlers/user"
 		. "app/server/handlers/group"
+		. "app/server/handlers/post"
 		. "app/server/middleware"
 		"encoding/json"
 		"net/http")
@@ -33,13 +34,18 @@ func CreateRouter() *mux.Router{
 	user.HandleFunc("/update", UpdateUser).Methods("PUT")
 	user.HandleFunc("/find", FindUsers).Methods("GET")
 
-	var group = api.PathPrefix("/group").Subrouter()
+	var group = api.PathPrefix("/groups").Subrouter()
+	group.HandleFunc("", GetAllGroups).Methods("GET")
 	group.HandleFunc("/create", CreateGroup).Methods("POST")
 	group.HandleFunc("/{id}", GetGroup).Methods("GET")
 	group.HandleFunc("/{id}/update", UpdateGroup).Methods("PUT")
 	group.HandleFunc("/{id}/enter", EnterGroup).Methods("POST")
 	group.HandleFunc("/{id}/exit", ExitGroup).Methods("POST")
 	group.HandleFunc("/{id}/delete", DeleteGroup).Methods("DELETE")
+
+	var posts = group.PathPrefix("/{id}/posts").Subrouter()
+	posts.HandleFunc("", GetAllPosts).Methods("GET")
+	posts.HandleFunc("/add", AddPost).Methods("POST")
 
 	// var admin = r.PathPrefix("/admin").Subrouter()
 	// admin.HandleFunc("/wipe/{name}", DropDB)
