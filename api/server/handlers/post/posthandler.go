@@ -4,7 +4,7 @@ import (. "app/server/handlers/user"
 		"errors")
 
 type Post struct {
-	Id int `json:"id" bson:"_id_:`
+	Id int `json:"id" bson:"_id_"`
 	GroupID int `json:"group_id" bson:"group_id"`
 	Author User `json:"author" bson:"author"`
 	Name string `json:"name" bson:"name"`
