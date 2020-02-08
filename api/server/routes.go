@@ -46,6 +46,7 @@ func CreateRouter() *mux.Router{
 	var posts = group.PathPrefix("/{id}/posts").Subrouter()
 	posts.HandleFunc("", GetAllPosts).Methods("GET")
 	posts.HandleFunc("/add", AddPost).Methods("POST")
+	posts.HandleFunc("/{post}/delete", DeletePost).Methods("DELETE")
 
 	// var admin = r.PathPrefix("/admin").Subrouter()
 	// admin.HandleFunc("/wipe/{name}", DropDB)
