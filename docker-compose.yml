@@ -1,5 +1,14 @@
 version: '3.3'
 services:
+    fileserver:
+        container_name: 'fileerver'
+        build: './fileserver'
+        ports: 
+            - '8080:8080'
+        volumes:
+            - './fileserver:/go/src/fileserver'
+        depends_on:
+            - 'mongo'
     api:
         container_name: 'api'
         build: './api'
