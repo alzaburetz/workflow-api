@@ -18,9 +18,9 @@ func RedisInit() error {
 }
 
 func CreateToken(login string) (string, error) {
-	token, err := uuid.NewV4()
+	token, _ := uuid.NewV4()
 	AccessRedis()
-	_, err = conn.Do("SET", token, login)
+	_, err := conn.Do("SET", token, login)
 	
 	return token.String(), err
 }

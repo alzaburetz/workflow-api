@@ -24,17 +24,17 @@ func CreateRouter() *mux.Router{
 	})
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
-	var github.com/alzaburetz/workflow-api/api = r.PathPrefix("/github.com/alzaburetz/workflow-api/api").Subrouter()
-	github.com/alzaburetz/workflow-api/api.Use(AuthMiddleware)
+	var api = r.PathPrefix("/api").Subrouter()
+	api.Use(AuthMiddleware)
 
-	var user = github.com/alzaburetz/workflow-api/api.PathPrefix("/user").Subrouter()
+	var user = api.PathPrefix("/user").Subrouter()
 	user.HandleFunc("", GetUser).Methods("GET")
 	user.HandleFunc("/register", RegisterUser).Methods("POST")
 	user.HandleFunc("/login", Login).Methods("POST")
 	user.HandleFunc("/update", UpdateUser).Methods("PUT")
 	user.HandleFunc("/find", FindUsers).Methods("GET")
 
-	var group = github.com/alzaburetz/workflow-api/api.PathPrefix("/groups").Subrouter()
+	var group = api.PathPrefix("/groups").Subrouter()
 	group.HandleFunc("", GetAllGroups).Methods("GET")
 	group.HandleFunc("/create", CreateGroup).Methods("POST")
 	group.HandleFunc("/{id}", GetGroup).Methods("GET")

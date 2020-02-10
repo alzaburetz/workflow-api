@@ -66,7 +66,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 				WriteAnswer(&w, "", []string {"User already exists"},400)
 				return
 			} 
-		token, err := uuid.NewV4()
+		token, _ := uuid.NewV4()
 
 				var user User
 				user.Id = token.String()

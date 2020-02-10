@@ -19,7 +19,7 @@ func UploadFile(w http.ResponseWriter, r *http.Request) {
 	// 	WriteAnswer(&w, "", []string{"Only jpg is allowed"}, 400)
 	// 	return
 	// }
-	fileName, _  := uuid.NewV4()
+	fileName, _ := uuid.NewV4()
 	f, err := os.OpenFile("./static/" + fileName.String() + ".png", os.O_WRONLY | os.O_CREATE, 0666)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

@@ -51,7 +51,7 @@ func AddPost(w http.ResponseWriter, r *http.Request) {
 	post.GroupID = groupid
 	post.Timestamp = time.Now().Unix()
 	//count, _ := database.DB("app").C("Posts").Find(bson.M{"group_id":id}).Count()
-	PostUUID, err := uuid.NewV4()
+	PostUUID, _ := uuid.NewV4()
 	post.Id = PostUUID.String()
 	if err = database.DB("app").C("Posts").Insert(post); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
