@@ -5,9 +5,9 @@ import ("net/http"
 		"io/ioutil"
 		"encoding/json"
 		"github.com/satori/go.uuid"
-		. "app/server/middleware"
-		. "app/server/handlers"
-		. "app/server/handlers/user")
+		. "github.com/alzaburetz/workflow-api/api/server/middleware"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers/user")
 
 
 func CreateGroup(w http.ResponseWriter, r *http.Request) {

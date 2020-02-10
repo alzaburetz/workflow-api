@@ -2,8 +2,8 @@ package post
 
 import ("net/http"
 		"gopkg.in/mgo.v2/bson"
-		. "app/server/handlers"
-		. "app/server/middleware"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers"
+		. "github.com/alzaburetz/workflow-api/api/server/middleware"
 		"github.com/gorilla/mux")
 
 func DeletePost(w http.ResponseWriter, r *http.Request) {

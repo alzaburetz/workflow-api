@@ -5,7 +5,7 @@ import ("net/http"
 		"io/ioutil"
 		"github.com/gorilla/mux"
 		"encoding/json"
-		."app/server/handlers")
+		."github.com/alzaburetz/workflow-api/api/server/handlers")
 
 func UpdateGroup(w http.ResponseWriter, r *http.Request) {
 	var muxvars = mux.Vars(r)

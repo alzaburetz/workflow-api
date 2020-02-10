@@ -3,7 +3,7 @@ package post
 import ("net/http"
 		"gopkg.in/mgo.v2/bson"
 		"github.com/gorilla/mux"
-		. "app/server/handlers")
+		. "github.com/alzaburetz/workflow-api/api/server/handlers")
 
 func GetAllPosts(w http.ResponseWriter, r *http.Request) {
 	var urlvars = mux.Vars(r)

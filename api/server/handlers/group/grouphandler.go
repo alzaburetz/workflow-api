@@ -1,7 +1,7 @@
 package group
 
-import (. "app/server/handlers/user"
-		. "app/server/handlers/post"
+import (. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers/post"
 		"errors")
 
 type Group struct {

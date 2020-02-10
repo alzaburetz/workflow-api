@@ -1,9 +1,9 @@
 package group
 
-import (. "app/server/handlers"
-		. "app/server/handlers/user"
-		. "app/server/middleware"
-		. "app/util"
+import (. "github.com/alzaburetz/workflow-api/api/server/handlers"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
+		. "github.com/alzaburetz/workflow-api/api/server/middleware"
+		. "github.com/alzaburetz/workflow-api/api/util"
 		"gopkg.in/mgo.v2/bson"
 		"github.com/gorilla/mux"
 		"net/http")

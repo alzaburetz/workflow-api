@@ -1,8 +1,8 @@
 package post
 
 import ("net/http"
-		. "app/server/handlers"
-		. "app/server/middleware"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers"
+		. "github.com/alzaburetz/workflow-api/api/server/middleware"
 		"gopkg.in/mgo.v2/bson"
 		"encoding/json"
 		"io/ioutil"

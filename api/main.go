@@ -2,7 +2,7 @@ package main
 
 import ("log"
 		//handl "github.com/gorilla/handlers"
-		. "./server"
+		. "github.com/alzaburetz/workflow-api/api/server"
 		"net/http")
 
 

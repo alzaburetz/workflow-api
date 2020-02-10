@@ -1,10 +1,10 @@
 package server
 
 import ("github.com/gorilla/mux"
-		. "app/server/handlers/user"
-		. "app/server/handlers/group"
-		. "app/server/handlers/post"
-		. "app/server/middleware"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers/group"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers/post"
+		. "github.com/alzaburetz/workflow-api/api/server/middleware"
 		"encoding/json"
 		"net/http")
 
@@ -24,17 +24,17 @@ func CreateRouter() *mux.Router{
 	})
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
-	var api = r.PathPrefix("/api").Subrouter()
-	api.Use(AuthMiddleware)
+	var github.com/alzaburetz/workflow-api/api = r.PathPrefix("/github.com/alzaburetz/workflow-api/api").Subrouter()
+	github.com/alzaburetz/workflow-api/api.Use(AuthMiddleware)
 
-	var user = api.PathPrefix("/user").Subrouter()
+	var user = github.com/alzaburetz/workflow-api/api.PathPrefix("/user").Subrouter()
 	user.HandleFunc("", GetUser).Methods("GET")
 	user.HandleFunc("/register", RegisterUser).Methods("POST")
 	user.HandleFunc("/login", Login).Methods("POST")
 	user.HandleFunc("/update", UpdateUser).Methods("PUT")
 	user.HandleFunc("/find", FindUsers).Methods("GET")
 
-	var group = api.PathPrefix("/groups").Subrouter()
+	var group = github.com/alzaburetz/workflow-api/api.PathPrefix("/groups").Subrouter()
 	group.HandleFunc("", GetAllGroups).Methods("GET")
 	group.HandleFunc("/create", CreateGroup).Methods("POST")
 	group.HandleFunc("/{id}", GetGroup).Methods("GET")

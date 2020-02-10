@@ -2,5 +2,5 @@
 	"comment": "",
 	"ignore": "test",
 	"package": [],
-	"rootPath": "workflow-api/api"
+	"rootPath": "github.com/alzaburetz/workflow-api/api"
 }

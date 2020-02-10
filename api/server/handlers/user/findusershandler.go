@@ -2,7 +2,7 @@ package user
 
 import ("net/http"
 		"encoding/json"
-		. "app/server/handlers"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers"
 		"gopkg.in/mgo.v2/bson"
 		"io/ioutil")
 

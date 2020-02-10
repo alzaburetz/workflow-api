@@ -1,0 +1,129 @@
+{
+	"comment": "",
+	"ignore": "",
+	"package": [
+		{
+			"path": "app/server",
+			"revision": ""
+		},
+		{
+			"path": "app/server/handlers",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "3KhDEC5MM0iyN+FsLfxpnvFVeuY=",
+			"path": "github.com/davecgh/go-spew/spew",
+			"revision": "d8f796af33cc11cb798c1aaeb27a4ebc5099927d",
+			"revisionTime": "2018-08-30T19:11:22Z"
+		},
+		{
+			"checksumSHA1": "a2yC46a1qsJomgY6rb+FkTFiqmE=",
+			"path": "github.com/davecgh/go-spew/spew/testdata",
+			"revision": "d8f796af33cc11cb798c1aaeb27a4ebc5099927d",
+			"revisionTime": "2018-08-30T19:11:22Z"
+		},
+		{
+			"checksumSHA1": "ml3LmDJ9VA3gRQaxlc3mswYIMDE=",
+			"path": "github.com/gomodule/redigo/redis",
+			"revision": "26e4eeace2d9883c2fb10c323e086c23a63be13d",
+			"revisionTime": "2020-01-23T09:35:20Z"
+		},
+		{
+			"checksumSHA1": "hHOpK73BJjC7dtbfNfKsceSZi9o=",
+			"path": "github.com/gorilla/mux",
+			"revision": "75dcda0896e109a2a22c9315bca3bb21b87b2ba5",
+			"revisionTime": "2020-01-12T19:17:43Z"
+		},
+		{
+			"checksumSHA1": "jwoPNwN+mUiYFQPjQa/U3Kli7Ak=",
+			"path": "github.com/kr/pretty",
+			"revision": "73f6ac0b30a98e433b289500d779f50c1a6f0712",
+			"revisionTime": "2018-05-06T08:33:45Z"
+		},
+		{
+			"checksumSHA1": "x9dJv+jQhUFN6R6h4fzPjGLvQLg=",
+			"path": "github.com/kr/text",
+			"revision": "e2ffdb16a802fe2bb95e2e35ff34f0e53aeef34f",
+			"revisionTime": "2018-05-06T08:24:08Z"
+		},
+		{
+			"checksumSHA1": "RZOdTSZN/PgcTqko5LzIAzw+UT4=",
+			"path": "github.com/pmezard/go-difflib/difflib",
+			"revision": "5d4384ee4fb2527b0a1256a821ebfc92f91efefc",
+			"revisionTime": "2018-12-26T10:54:42Z"
+		},
+		{
+			"checksumSHA1": "tx9GWP4+3YpELpR7YgZh9Ld2LBk=",
+			"path": "github.com/satori/go.uuid",
+			"revision": "b2ce2384e17bbe0c6d34077efa39dbab3e09123b",
+			"revisionTime": "2018-10-28T12:50:25Z"
+		},
+		{
+			"checksumSHA1": "KGOGWL6RjAw27Sk5uWw0czryPRY=",
+			"path": "github.com/stretchr/testify/assert",
+			"revision": "55d8b5740cad9f512b615f97e967dd50c3d923b4",
+			"revisionTime": "2020-02-05T10:03:40Z"
+		},
+		{
+			"checksumSHA1": "lV+PzjLB90qS9gW92HBcBJ4NBbs=",
+			"path": "github.com/stretchr/testify/require",
+			"revision": "55d8b5740cad9f512b615f97e967dd50c3d923b4",
+			"revisionTime": "2020-02-05T10:03:40Z"
+		},
+		{
+			"checksumSHA1": "IKKJNZLwq9wpHAKlrEG3e2qctf4=",
+			"path": "golang.org/x/crypto/bcrypt",
+			"revision": "6ca56c2f2e2b26dc733347707d0e75d8eb050ee1",
+			"revisionTime": "2020-02-10T19:01:28Z"
+		},
+		{
+			"checksumSHA1": "d0gyLhXz1AdyavVdPYI19MnbbPQ=",
+			"path": "golang.org/x/crypto/blowfish",
+			"revision": "6ca56c2f2e2b26dc733347707d0e75d8eb050ee1",
+			"revisionTime": "2020-02-10T19:01:28Z"
+		},
+		{
+			"checksumSHA1": "vgYj71VS5CXqcOn8UkN9hoG68Ic=",
+			"path": "gopkg.in/check.v1",
+			"revision": "41f04d3bba152ddec2103e299fed053415705330",
+			"revisionTime": "2019-09-02T08:05:02Z"
+		},
+		{
+			"checksumSHA1": "8YwRa9OSCcQdSgSU7u2DhCR5z6g=",
+			"path": "gopkg.in/mgo.v2",
+			"revision": "a6b53ec6cb22a3699387a57a161566f9402ee85b",
+			"revisionTime": "2019-08-16T09:39:44Z"
+		},
+		{
+			"checksumSHA1": "anoksckqBxuy90W0kAE38l/o3DE=",
+			"path": "gopkg.in/mgo.v2/bson",
+			"revision": "a6b53ec6cb22a3699387a57a161566f9402ee85b",
+			"revisionTime": "2019-08-16T09:39:44Z"
+		},
+		{
+			"checksumSHA1": "trGhCcEZSOZTwlLfWCRAoXXihW8=",
+			"path": "gopkg.in/mgo.v2/internal/json",
+			"revision": "a6b53ec6cb22a3699387a57a161566f9402ee85b",
+			"revisionTime": "2019-08-16T09:39:44Z"
+		},
+		{
+			"checksumSHA1": "LEvMCnprte47qdAxWvQ/zRxVF1U=",
+			"path": "gopkg.in/mgo.v2/internal/sasl",
+			"revision": "a6b53ec6cb22a3699387a57a161566f9402ee85b",
+			"revisionTime": "2019-08-16T09:39:44Z"
+		},
+		{
+			"checksumSHA1": "fOxeCpKRYNTTM2VCrsU2S/KEd1s=",
+			"path": "gopkg.in/mgo.v2/internal/scram",
+			"revision": "a6b53ec6cb22a3699387a57a161566f9402ee85b",
+			"revisionTime": "2019-08-16T09:39:44Z"
+		},
+		{
+			"checksumSHA1": "xhWfp208UTtgsQ30bJGjF6f7+IY=",
+			"path": "gopkg.in/yaml.v2",
+			"revision": "53403b58ad1b561927d19068c655246f2db79d48",
+			"revisionTime": "2020-01-21T17:19:40Z"
+		}
+	],
+	"rootPath": "github.com/alzaburetz/workflow-api"
+}

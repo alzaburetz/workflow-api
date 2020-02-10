@@ -1,10 +1,10 @@
 package group
 
 import ("net/http"
-		. "app/server/handlers"
-		. "app/server/middleware"
-		. "app/server/handlers/user"
-		. "app/util"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers"
+		. "github.com/alzaburetz/workflow-api/api/server/middleware"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
+		. "github.com/alzaburetz/workflow-api/api/util"
 		"gopkg.in/mgo.v2/bson"
 		"github.com/gorilla/mux")
 

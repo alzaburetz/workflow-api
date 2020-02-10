@@ -1,6 +1,6 @@
 package post
 
-import (. "app/server/handlers/user"
+import (. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
 		"errors")
 
 type Post struct {

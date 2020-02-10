@@ -4,7 +4,7 @@ import ("net/http"
 		"io/ioutil"
 		"time"
 		"gopkg.in/mgo.v2/bson"
-		. "app/server/handlers"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers"
 		"github.com/satori/go.uuid"
 		"golang.org/x/crypto/bcrypt"
 		"encoding/json")

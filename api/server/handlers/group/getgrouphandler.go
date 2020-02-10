@@ -1,7 +1,7 @@
 package group
 
 import ("net/http"
-		. "app/server/handlers"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers"
 		"gopkg.in/mgo.v2/bson"
 		"github.com/gorilla/mux")
 

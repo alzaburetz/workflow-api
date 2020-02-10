@@ -1,8 +1,8 @@
 package user
 
 import ("net/http"
-		. "app/server/middleware"
-		. "app/server/handlers"
+		. "github.com/alzaburetz/workflow-api/api/server/middleware"
+		. "github.com/alzaburetz/workflow-api/api/server/handlers"
 		"gopkg.in/mgo.v2/bson")
 
 //Gets user by token
