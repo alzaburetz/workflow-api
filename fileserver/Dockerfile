@@ -11,5 +11,5 @@ RUN go get github.com/pilu/fresh
 RUN go get gopkg.in/mgo.v2
 RUN go get -u github.com/gorilla/mux
 
-EXPOSE 3000
+EXPOSE 8080
 CMD [ "fresh" ]

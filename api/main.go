@@ -2,7 +2,7 @@ package main
 
 import ("log"
 		//handl "github.com/gorilla/handlers"
-		. "app/server"
+		. "./server"
 		"net/http")
 
 
