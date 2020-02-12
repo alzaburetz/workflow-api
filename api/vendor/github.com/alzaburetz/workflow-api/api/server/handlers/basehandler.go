@@ -2,6 +2,8 @@ package handlers
 
 import ("gopkg.in/mgo.v2"
 		"net/http"
+		"log"
+		"os"
 		"encoding/json")
 
 var database *mgo.Session
@@ -9,6 +11,8 @@ var database *mgo.Session
 type DataBase struct {
 	db *mgo.Session
 }
+
+
 
 
 type Resp struct {
@@ -21,9 +25,27 @@ func InitDatabase(session *mgo.Session) {
 	database = session
 }
 
+
+  func CreateDatabaseInstance() {
+	dialinfo := &mgo.DialInfo{
+		Addrs: []string{"ds163517.mlab.com:63517"},
+		Database: "heroku_gwrf0w5w",
+		Username: "admin",
+		Password: "main123",
+	}
+	var err error
+
+	if database, err = mgo.DialWithInfo(dialinfo); err != nil {
+		log.Println("AAAAAAAAAAAA")
+		log.Println(err.Error())
+		os.Exit(1)
+	}
+  }
+  
+
 func AccessDataStore() *mgo.Session {
 	if database == nil {
-		database, _ = mgo.Dial("mongo:27017")
+		CreateDatabaseInstance()
 	}
 	return database.Copy()
 }
