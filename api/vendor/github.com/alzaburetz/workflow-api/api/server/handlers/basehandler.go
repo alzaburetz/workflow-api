@@ -2,7 +2,6 @@ package handlers
 
 import ("gopkg.in/mgo.v2"
 		"net/http"
-		"log"
 		"encoding/json")
 
 var database *mgo.Session
@@ -23,13 +22,8 @@ func InitDatabase(session *mgo.Session) {
 }
 
 func AccessDataStore() *mgo.Session {
-	var err error
 	if database == nil {
-		database, err = mgo.Dial("mongodb://admin:main123@ds163517.mlab.com:63517/heroku_gwrf0w5w")
-		if err != nil {
-			log.Println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA BLYA" + err.Error())
-			return nil
-		}
+		database, _ = mgo.Dial("mongo:27017")
 	}
 	return database.Copy()
 }

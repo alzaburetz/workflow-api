@@ -1,0 +1,24 @@
+# github.com/alzaburetz/workflow-api/api v0.0.0-20200210220137-a320a2e4d607
+github.com/alzaburetz/workflow-api/api/server
+github.com/alzaburetz/workflow-api/api/server/handlers
+github.com/alzaburetz/workflow-api/api/server/handlers/group
+github.com/alzaburetz/workflow-api/api/server/handlers/post
+github.com/alzaburetz/workflow-api/api/server/handlers/user
+github.com/alzaburetz/workflow-api/api/server/middleware
+github.com/alzaburetz/workflow-api/api/util
+# github.com/gomodule/redigo v2.0.0+incompatible
+github.com/gomodule/redigo/internal
+github.com/gomodule/redigo/redis
+# github.com/gorilla/mux v1.7.3
+github.com/gorilla/mux
+# github.com/satori/go.uuid v1.2.0
+github.com/satori/go.uuid
+# golang.org/x/crypto v0.0.0-20200210222208-86ce3cb69678
+golang.org/x/crypto/bcrypt
+golang.org/x/crypto/blowfish
+# gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
+gopkg.in/mgo.v2
+gopkg.in/mgo.v2/bson
+gopkg.in/mgo.v2/internal/json
+gopkg.in/mgo.v2/internal/sasl
+gopkg.in/mgo.v2/internal/scram

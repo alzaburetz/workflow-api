@@ -4,7 +4,6 @@ import ("net/http"
 		"errors"
 		"time"
 		"fmt"
-		"log"
 		"github.com/satori/go.uuid"
 		"github.com/gomodule/redigo/redis")
 
@@ -13,13 +12,12 @@ var conn redis.Conn
 
 func RedisInit() error {
 	var duration = time.Second * 5
-	con, err := redis.DialTimeout("tcp", "redis://redistogo:c7ec584512cad0331e2d71355fadb333@pike.redistogo.com:10201/", duration, duration, duration)
+	con, err := redis.DialTimeout("tcp", "redis:6379", duration, duration, duration)
 	conn = con
 	return err
 }
 
 func CreateToken(login string) (string, error) {
-	
 	token := uuid.NewV4()
 	AccessRedis()
 	_, err := conn.Do("SET", token, login)
@@ -28,7 +26,6 @@ func CreateToken(login string) (string, error) {
 }
 
 func UpdateToken(login, token string) error {
-	
 	AccessRedis()
 	_, err := conn.Do("SET", token, login)
 	return err
@@ -47,10 +44,7 @@ func CheckToken(r *http.Request) (error, string) {
 
 func AccessRedis() {
 	if conn == nil {
-		err := RedisInit()
-		if err != nil {
-			log.Println("AAAAAAAAAAAAAAAA" + err.Error())
-		}
+		_ = RedisInit()
 	}
 }
 

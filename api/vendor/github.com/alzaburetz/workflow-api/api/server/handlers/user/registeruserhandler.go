@@ -58,11 +58,6 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 			//This part checks if user aready exists
 			var userExists User
 			var database = AccessDataStore()
-			if database ==nil {
-				w.WriteHeader(http.StatusBadRequest)
-				WriteAnswer(&w, "", []string {"Database is nil"},400)
-				return
-			}
 			
 			defer database.Close()
 			database.DB("app").C("Users").Find(bson.M{"$or" :[]bson.M{ bson.M{"email": auth.Email}, bson.M{"phone":auth.Phone}}}).One(&userExists)

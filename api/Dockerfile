@@ -7,13 +7,13 @@
 
 # COPY . .
 
-# RUN go get gopkg.in/mgo.v2
-# RUN go get -u github.com/gorilla/mux
-# RUN go get -u github.com/gorilla/handlers
+# # RUN go get gopkg.in/mgo.v2
+# # RUN go get -u github.com/gorilla/mux
+# # RUN go get -u github.com/gorilla/handlers
 # RUN go get github.com/pilu/fresh
-# RUN go get github.com/gomodule/redigo/redis
-# RUN go get github.com/satori/go.uuid
-# RUN go get golang.org/x/crypto/bcrypt
+# # RUN go get github.com/gomodule/redigo/redis
+# # RUN go get github.com/satori/go.uuid
+# # RUN go get golang.org/x/crypto/bcrypt
 # RUN go get ./...
 
 # EXPOSE 3000
@@ -39,4 +39,4 @@ ENV HOME /api
 WORKDIR /api
 RUN useradd -m heroku
 USER heroku
-CMD /api/bin/api
+# CMD /api/bin/api
