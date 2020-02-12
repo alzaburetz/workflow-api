@@ -3,6 +3,7 @@ package user
 import ("net/http"
 		"io/ioutil"
 		"time"
+		"fmt"
 		"gopkg.in/mgo.v2/bson"
 		. "github.com/alzaburetz/workflow-api/api/server/handlers"
 		"github.com/satori/go.uuid"
@@ -57,20 +58,22 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 			
 			//This part checks if user aready exists
 			var userExists User
-			var database = AccessDataStore()
+			database := AccessDataStore()
 			if database ==nil {
 				w.WriteHeader(http.StatusBadRequest)
 				WriteAnswer(&w, "", []string {"Database is nil"},400)
 				return
 			}
+			fmt.Println("database connected")
 			
 			defer database.Close()
-			database.DB("app").C("Users").Find(bson.M{"$or" :[]bson.M{ bson.M{"email": auth.Email}, bson.M{"phone":auth.Phone}}}).One(&userExists)
+			database.DB("heroku_gwrf0w5w").C("Users").Find(bson.M{"$or" :[]bson.M{ bson.M{"email": auth.Email}, bson.M{"phone":auth.Phone}}}).One(&userExists)
 			if userExists.Email != "" || userExists.Phone != "" { //if user is found, return error
 				w.WriteHeader(http.StatusBadRequest)
 				WriteAnswer(&w, "", []string {"User already exists"},400)
 				return
 			} 
+			fmt.Println("User inserted")
 		token := uuid.NewV4()
 
 				var user User
@@ -79,14 +82,23 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 				user.Name = auth.Name
 				user.Email = auth.Email
 				user.Phone = auth.Phone
-				database.DB("app").C("Users").Insert(user)
-	
+				err = database.DB("heroku_gwrf0w5w").C("Users").Insert(user)
+				if err != nil {
+					w.WriteHeader(http.StatusInternalServerError)
+					WriteAnswer(&w, nil, []string{"Error inserting user", err.Error()}, 500)
+					return
+				}
 	
 				//Save user credentials 
 				//Hash password
 				passwd, _ := bcrypt.GenerateFromPassword([]byte(auth.Password), bcrypt.DefaultCost)
 				auth.Password = string(passwd)
-				database.DB("app").C("Credentials").Insert(auth)
+				err = database.DB("heroku_gwrf0w5w").C("Credentials").Insert(auth)
+				if err != nil {
+					w.WriteHeader(http.StatusInternalServerError)
+					WriteAnswer(&w, nil, []string{"Error inserting user", err.Error()}, 500)
+					return
+				}
 	
 				w.WriteHeader(http.StatusOK)
 				var er = make([]string, 0)
