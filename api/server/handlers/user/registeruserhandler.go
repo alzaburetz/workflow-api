@@ -64,9 +64,6 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 				WriteAnswer(&w, "", []string {"Database is nil"},400)
 				return
 			}
-			fmt.Println("database connected")
-			
-			defer database.Close()
 			database.DB("heroku_gwrf0w5w").C("Users").Find(bson.M{"$or" :[]bson.M{ bson.M{"email": auth.Email}, bson.M{"phone":auth.Phone}}}).One(&userExists)
 			if userExists.Email != "" || userExists.Phone != "" { //if user is found, return error
 				w.WriteHeader(http.StatusBadRequest)
