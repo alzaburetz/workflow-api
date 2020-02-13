@@ -1,19 +1,21 @@
 package group
 
-import (. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
-		. "github.com/alzaburetz/workflow-api/api/server/handlers/post"
-		"errors")
+import (
+	"errors"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers/post"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
+)
 
 type Group struct {
-	Creator User `json:"creator" bson:"creator"`
-	Id string `json:"id" bson:"_id_"`
-	Name string `json:"name" bson:"name"`
+	Creator     User   `json:"creator" bson:"creator"`
+	Id          string `json:"id" bson:"_id_"`
+	Name        string `json:"name" bson:"name"`
 	Description string `json:"description" bson:"description"`
-	UserCount int `json:"usercount" bson:"usercount"`
-	Posts []Post `json:"posts" bson:"posts"`
+	UserCount   int    `json:"usercount" bson:"usercount"`
+	Posts       []Post `json:"posts" bson:"posts"`
 }
 
-func (gr *Group)HasRequiredFields() error {
+func (gr *Group) HasRequiredFields() error {
 	if len(gr.Name) == 0 {
 		return errors.New("Name is empty")
 	} else if len(gr.Description) == 0 {

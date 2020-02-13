@@ -1,12 +1,14 @@
 package server
 
-import ("github.com/gorilla/mux"
-		. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
-		. "github.com/alzaburetz/workflow-api/api/server/handlers/group"
-		. "github.com/alzaburetz/workflow-api/api/server/handlers/post"
-		. "github.com/alzaburetz/workflow-api/api/server/middleware"
-		"encoding/json"
-		"net/http")
+import (
+	"encoding/json"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers/group"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers/post"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
+	. "github.com/alzaburetz/workflow-api/api/server/middleware"
+	"github.com/gorilla/mux"
+	"net/http"
+)
 
 var r *mux.Router
 
@@ -14,10 +16,10 @@ type Routes struct {
 	Paths []string `json:"avaliable_routes"`
 }
 
-func CreateRouter() *mux.Router{
+func CreateRouter() *mux.Router {
 	r = mux.NewRouter()
 	r.Use(commonMiddleware)
-	r.HandleFunc("/", func (w http.ResponseWriter, r *http.Request)  {
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		var routes Routes
 		routes.Paths = GetRoutes()
 		json.NewEncoder(w).Encode(routes)
@@ -55,19 +57,19 @@ func CreateRouter() *mux.Router{
 }
 
 func commonMiddleware(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        w.Header().Add("Content-Type", "application/json")
-        next.ServeHTTP(w, r)
-    })
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
+		next.ServeHTTP(w, r)
+	})
 }
 
 func GetRoutes() []string {
 	var routes []string
 	r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
-        t, err := route.GetPathTemplate()
-        if err != nil {
-            return err
-        }
+		t, err := route.GetPathTemplate()
+		if err != nil {
+			return err
+		}
 		routes = append(routes, t)
 		return nil
 	})

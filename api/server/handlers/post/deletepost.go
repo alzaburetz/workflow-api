@@ -1,10 +1,12 @@
 package post
 
-import ("net/http"
-		"gopkg.in/mgo.v2/bson"
-		. "github.com/alzaburetz/workflow-api/api/server/handlers"
-		. "github.com/alzaburetz/workflow-api/api/server/middleware"
-		"github.com/gorilla/mux")
+import (
+	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	. "github.com/alzaburetz/workflow-api/api/server/middleware"
+	"github.com/gorilla/mux"
+	"gopkg.in/mgo.v2/bson"
+	"net/http"
+)
 
 func DeletePost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -16,9 +18,9 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	var post_ Post
 
-	post_id_group := []bson.M{bson.M{"group_id":group},bson.M{"_id_":post}}
+	post_id_group := []bson.M{bson.M{"group_id": group}, bson.M{"_id_": post}}
 
-	var and_operator = bson.M{"$and":post_id_group}
+	var and_operator = bson.M{"$and": post_id_group}
 
 	//var match = bson.M{"$match":and_operator}
 
@@ -46,8 +48,6 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
-	
 
 	w.WriteHeader(http.StatusOK)
 	WriteAnswer(&w, "Successfully removed post", []string{}, 200)

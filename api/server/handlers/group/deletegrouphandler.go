@@ -1,11 +1,13 @@
 package group
 
-import ("net/http"
-		. "github.com/alzaburetz/workflow-api/api/server/handlers"
-		// . "app/server/handlers/user"
-		. "github.com/alzaburetz/workflow-api/api/server/middleware"
-		"gopkg.in/mgo.v2/bson"
-		"github.com/gorilla/mux")
+import (
+	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	"net/http"
+	// . "app/server/handlers/user"
+	. "github.com/alzaburetz/workflow-api/api/server/middleware"
+	"github.com/gorilla/mux"
+	"gopkg.in/mgo.v2/bson"
+)
 
 func DeleteGroup(w http.ResponseWriter, r *http.Request) {
 	var urlvars = mux.Vars(r)
@@ -28,29 +30,29 @@ func DeleteGroup(w http.ResponseWriter, r *http.Request) {
 
 	var group Group
 
-	iter := database.DB("app").C("Groups").Pipe([]bson.M{{"$match": bson.M{"$and": []bson.M{{"creator.email":email}, {"_id_":groupid}}}}}).Iter()
-	var groupcount int 
+	iter := database.DB("app").C("Groups").Pipe([]bson.M{{"$match": bson.M{"$and": []bson.M{{"creator.email": email}, {"_id_": groupid}}}}}).Iter()
+	var groupcount int
 	for iter.Next(&group) {
 		groupcount++
 	}
 	if groupcount == 0 {
 		w.WriteHeader(http.StatusUnauthorized)
-		WriteAnswer(&w,nil,[]string{"You are not the owner"},401)
+		WriteAnswer(&w, nil, []string{"You are not the owner"}, 401)
 		return
 	}
-	_, err = database.DB("app").C("Users").UpdateAll(bson.M{"_id_":bson.M{"$gte":0}}, bson.M{"$pull":bson.M{"groups":groupid}})
+	_, err = database.DB("app").C("Users").UpdateAll(bson.M{"_id_": bson.M{"$gte": 0}}, bson.M{"$pull": bson.M{"groups": groupid}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{err.Error()}, 500)
 		return
 	}
 
-	if err = database.DB("app").C("Groups").Remove(bson.M{"_id_":groupid}); err != nil {
+	if err = database.DB("app").C("Groups").Remove(bson.M{"_id_": groupid}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error removing group", err.Error()}, 500)
 		return
 	}
 	w.WriteHeader(http.StatusOK)
 	WriteAnswer(&w, "Successfully deleted group", []string{}, 200)
-	
+
 }

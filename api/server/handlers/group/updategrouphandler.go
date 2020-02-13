@@ -1,11 +1,13 @@
 package group
 
-import ("net/http"
-		"gopkg.in/mgo.v2/bson"
-		"io/ioutil"
-		"github.com/gorilla/mux"
-		"encoding/json"
-		."github.com/alzaburetz/workflow-api/api/server/handlers")
+import (
+	"encoding/json"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	"github.com/gorilla/mux"
+	"gopkg.in/mgo.v2/bson"
+	"io/ioutil"
+	"net/http"
+)
 
 func UpdateGroup(w http.ResponseWriter, r *http.Request) {
 	var muxvars = mux.Vars(r)
@@ -29,14 +31,14 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
 
 	if err = group.HasRequiredFields(); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		WriteAnswer(&w, nil, []string{ err.Error()}, 400)
+		WriteAnswer(&w, nil, []string{err.Error()}, 400)
 		return
 	}
 
 	var database = AccessDataStore()
 	defer database.Close()
 
-	err = database.DB("app").C("Groups").Update(bson.M{"_id_":id}, bson.M{"$set": bson.D{{"name",group.Name}, {"description",group.Description}}})
+	err = database.DB("app").C("Groups").Update(bson.M{"_id_": id}, bson.M{"$set": bson.D{{"name", group.Name}, {"description", group.Description}}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updating document", err.Error()}, 500)
@@ -44,10 +46,9 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var updated Group
-	database.DB("app").C("Groups").Find(bson.M{"_id_":groupvar}).One(&updated)
+	database.DB("app").C("Groups").Find(bson.M{"_id_": groupvar}).One(&updated)
 
 	w.WriteHeader(http.StatusOK)
-	WriteAnswer(&w, updated, []string{},200)
-
+	WriteAnswer(&w, updated, []string{}, 200)
 
 }

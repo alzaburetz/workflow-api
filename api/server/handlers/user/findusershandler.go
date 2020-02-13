@@ -1,10 +1,12 @@
 package user
 
-import ("net/http"
-		"encoding/json"
-		. "github.com/alzaburetz/workflow-api/api/server/handlers"
-		"gopkg.in/mgo.v2/bson"
-		"io/ioutil")
+import (
+	"encoding/json"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	"gopkg.in/mgo.v2/bson"
+	"io/ioutil"
+	"net/http"
+)
 
 func FindUsers(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadAll(r.Body)
@@ -16,7 +18,7 @@ func FindUsers(w http.ResponseWriter, r *http.Request) {
 
 	var phones []string
 
-	if err = json.Unmarshal(data, &phones); err!= nil {
+	if err = json.Unmarshal(data, &phones); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, "", []string{"Error unmarshalling to json", err.Error()}, 500)
 		return
@@ -25,7 +27,7 @@ func FindUsers(w http.ResponseWriter, r *http.Request) {
 	var db = AccessDataStore()
 	defer db.Close()
 
-	iter := db.DB("app").C("Users").Find(bson.M{"phone":bson.M{"$in":phones}}).Iter();
+	iter := db.DB("app").C("Users").Find(bson.M{"phone": bson.M{"$in": phones}}).Iter()
 	var founduser User
 	var foundUsers []User
 
@@ -34,15 +36,13 @@ func FindUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	WriteAnswer(&w, foundUsers, []string{}, 200)
-	return 
+	return
 
-	if err = db.DB("app").C("Users").Find(bson.M{"phone":bson.M{"$in":phones}}).All(&foundUsers); err != nil {
+	if err = db.DB("app").C("Users").Find(bson.M{"phone": bson.M{"$in": phones}}).All(&foundUsers); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, "", []string{"Error reading data from database", err.Error()}, 500)
 		return
 	}
-
-
 
 	w.WriteHeader(http.StatusOK)
 	WriteAnswer(&w, foundUsers, []string{}, 200)

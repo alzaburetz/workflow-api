@@ -1,9 +1,11 @@
 package handlers
 
-import ("net/http"
-		"os"
-		"io"
-		"github.com/satori/go.uuid")
+import (
+	"github.com/satori/go.uuid"
+	"io"
+	"net/http"
+	"os"
+)
 
 func UploadFile(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(10 << 20)
@@ -12,7 +14,7 @@ func UploadFile(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, "", []string{"Couldn't get file from form", err.Error()}, 400)
 		return
-	} 
+	}
 	defer file.Close()
 
 	// if typ := http.DetectContentType(file); typ != "image/jpg" {
@@ -20,7 +22,7 @@ func UploadFile(w http.ResponseWriter, r *http.Request) {
 	// 	return
 	// }
 	fileName := uuid.NewV4()
-	f, err := os.OpenFile("./static/" + fileName.String() + ".png", os.O_WRONLY | os.O_CREATE, 0666)
+	f, err := os.OpenFile("./static/"+fileName.String()+".png", os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, "", []string{"Couldn't create file", err.Error()}, 500)

@@ -1,7 +1,9 @@
 package group
 
-import ("net/http"
-		. "github.com/alzaburetz/workflow-api/api/server/handlers")
+import (
+	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	"net/http"
+)
 
 func GetAllGroups(w http.ResponseWriter, r *http.Request) {
 	var groups []Group

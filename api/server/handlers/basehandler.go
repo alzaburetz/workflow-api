@@ -1,10 +1,12 @@
 package handlers
 
-import ("gopkg.in/mgo.v2"
-		"net/http"
-		"log"
-		"os"
-		"encoding/json")
+import (
+	"encoding/json"
+	"gopkg.in/mgo.v2"
+	"log"
+	"net/http"
+	"os"
+)
 
 var database *mgo.Session
 
@@ -12,12 +14,9 @@ type DataBase struct {
 	db *mgo.Session
 }
 
-
-
-
 type Resp struct {
-	Code int `json:"code"`
-	Errors []string `json:"errors"`
+	Code     int         `json:"code"`
+	Errors   []string    `json:"errors"`
 	Response interface{} `json:"response"`
 }
 
@@ -25,10 +24,9 @@ func InitDatabase(session *mgo.Session) {
 	database = session
 }
 
-
-  func CreateDatabaseInstance() {
+func CreateDatabaseInstance() {
 	dialinfo := &mgo.DialInfo{
-		Addrs: []string{"ds163517.mlab.com:63517"},
+		Addrs:    []string{"ds163517.mlab.com:63517"},
 		Database: "heroku_gwrf0w5w",
 		Username: "admin",
 		Password: "main123",
@@ -40,8 +38,7 @@ func InitDatabase(session *mgo.Session) {
 		log.Println(err.Error())
 		os.Exit(1)
 	}
-  }
-  
+}
 
 func AccessDataStore() *mgo.Session {
 	if database == nil {
@@ -51,9 +48,9 @@ func AccessDataStore() *mgo.Session {
 }
 
 func WriteAnswer(w *http.ResponseWriter, msg interface{}, httperrors []string, code int) error {
-	var response = Resp {
-		Code: code,
-		Errors: httperrors,
+	var response = Resp{
+		Code:     code,
+		Errors:   httperrors,
 		Response: msg,
 	}
 	return json.NewEncoder(*w).Encode(response)

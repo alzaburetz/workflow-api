@@ -1,12 +1,14 @@
 package user
 
-import ("net/http"
-		"io/ioutil"
-		. "github.com/alzaburetz/workflow-api/api/server/middleware"
-		. "github.com/alzaburetz/workflow-api/api/server/handlers"
-		"gopkg.in/mgo.v2/bson"
-		"golang.org/x/crypto/bcrypt"
-		"encoding/json")
+import (
+	"encoding/json"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	. "github.com/alzaburetz/workflow-api/api/server/middleware"
+	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/mgo.v2/bson"
+	"io/ioutil"
+	"net/http"
+)
 
 //Handles login
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +16,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		WriteAnswer(&w, "", []string {"Couldn't read data from post form", "Expecing json"}, 400)
+		WriteAnswer(&w, "", []string{"Couldn't read data from post form", "Expecing json"}, 400)
 		return
 	}
 
@@ -34,9 +36,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	
-
-	err = bcrypt.CompareHashAndPassword([]byte(userExists.Password),[]byte(auth.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(userExists.Password), []byte(auth.Password))
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		WriteAnswer(&w, "", []string{"Password is incorrect"}, 401)
