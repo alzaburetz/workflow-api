@@ -7,6 +7,8 @@ WORKDIR /go/src/src/github.com/alzaburetz/workflow-api/api
 
 COPY . .
 
+RUN export PORT=3000
+
 RUN go get ./...
 
 EXPOSE 3000
