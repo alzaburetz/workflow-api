@@ -59,7 +59,6 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	//This part checks if user aready exists
 	var userExists User
-	database := AccessDataStore()
 	if database == nil {
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, "", []string{"Database is nil"}, 400)
