@@ -34,8 +34,6 @@ func CreateDatabaseInstance() {
 	var err error
 
 	if database, err = mgo.DialWithInfo(dialinfo); err != nil {
-		log.Println("AAAAAAAAAAAA")
-		log.Println(err.Error())
 		os.Exit(1)
 	}
 }
