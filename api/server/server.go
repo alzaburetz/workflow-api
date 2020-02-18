@@ -2,7 +2,6 @@ package server
 
 import (
 	"crypto/tls"
-	"fmt"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers"
 	"gopkg.in/mgo.v2"
 	"net/http"
@@ -15,7 +14,6 @@ type Server struct {
 }
 
 func (s *Server) ServerNew() {
-	fmt.Println("Creating server")
 	s.HTTP = CreateHTTPServer()
 	CreateDatabaseInstance()
 }
