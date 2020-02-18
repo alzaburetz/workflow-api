@@ -1,6 +1,6 @@
 package main
 
-import (. "app/server")
+import (. "github.com/alzaburetz/workflow-api/fileserver/server")
 
 func main() {
 	var s Server 
