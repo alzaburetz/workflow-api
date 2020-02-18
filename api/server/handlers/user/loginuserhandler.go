@@ -45,7 +45,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		token, err := CreateToken(auth.Email)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			WriteAnswer(&w, "", []string{"Error creating token"}, 500)
+			WriteAnswer(&w, "", []string{"Error creating token, aborting", err.Error()}, 500)
 			return
 		} else {
 			w.WriteHeader(http.StatusOK)
