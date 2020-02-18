@@ -9,34 +9,45 @@ import ("net/http"
 		"github.com/gomodule/redigo/redis")
 
 
-var conn redis.Conn
 
-func RedisInit() error {
-	//var duration = time.Second * 5
-	con, err := redis.DialURL("redis://redistogo:c7ec584512cad0331e2d71355fadb333@pike.redistogo.com:10201/")
-	conn = con
-	return err
-}
+// func RedisInit() error {
+// 	//var duration = time.Second * 5
+// 	con, err := redis.DialURL("redis://redistogo:c7ec584512cad0331e2d71355fadb333@pike.redistogo.com:10201/")
+// 	//con, err := redis.DialURL("redis://h:p7f2f70abac018d527c3476ba62ed68ff8aaab05a7376c6f994ad6fd6a5fcce5a@ec2-34-200-118-77.compute-1.amazonaws.com:11849")
+	
+// 	return err
+// }
 
 func CreateToken(login string) (string, error) {
 	
 	token := uuid.NewV4()
-	AccessRedis()
-	_, err := conn.Do("SET", token, login)
-	
+	conn, err := AccessRedis()
+	if err != nil {
+		return "" , err
+	}
+	defer conn.Close()
+	_, err = conn.Do("SET", token, login)
 	return token.String(), err
 }
 
 func UpdateToken(login, token string) error {
 	
-	AccessRedis()
-	_, err := conn.Do("SET", token, login)
+	conn, err := AccessRedis()
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	_, err  = conn.Do("SET", token, login)
 	return err
 }
 
 func CheckToken(r *http.Request) (error, string) {
 	token := r.Header.Get("Token")
-	AccessRedis()
+	conn, err := AccessRedis()
+	if err != nil {
+		return err, ""
+	}
+	defer conn.Close()
 	if (len(token) > 0) {
 		user, _ := conn.Do("GET",token)
 		return nil, fmt.Sprintf("%s", user)
@@ -45,13 +56,13 @@ func CheckToken(r *http.Request) (error, string) {
 	}
 }
 
-func AccessRedis() {
-	if conn == nil {
-		err := RedisInit()
+func AccessRedis() (redis.Conn, error){
+		con, err := redis.DialURL("redis://redistogo:c7ec584512cad0331e2d71355fadb333@pike.redistogo.com:10201/")
 		if err != nil {
-			log.Println("AAAAAAAAAAAAAAAA" + err.Error())
+			log.Println(err.Error())
+			return nil, err
 		}
-	}
+		return con, nil
 }
 
 func AuthMiddleware(next http.Handler) http.Handler {
