@@ -2,7 +2,7 @@ package middleware
 
 import ("net/http"
 		"errors"
-		"time"
+		//"time"
 		"fmt"
 		"log"
 		"github.com/satori/go.uuid"
@@ -12,8 +12,8 @@ import ("net/http"
 var conn redis.Conn
 
 func RedisInit() error {
-	var duration = time.Second * 5
-	con, err := redis.DialTimeout("tcp", "redis://redistogo:c7ec584512cad0331e2d71355fadb333@pike.redistogo.com:10201/", duration, duration, duration)
+	//var duration = time.Second * 5
+	con, err := redis.DialURL("redis://redistogo:c7ec584512cad0331e2d71355fadb333@pike.redistogo.com:10201/")
 	conn = con
 	return err
 }

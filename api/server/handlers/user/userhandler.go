@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+var (
+	DBNAME="heroku_gwrf0w5w"
+)
+
 type User struct {
 	Id           string   `json:"-" bson:"_id_"`
 	Name         string   `json:"name" bson:"name"`

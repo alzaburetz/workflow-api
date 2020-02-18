@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"gopkg.in/mgo.v2"
-	"log"
 	"net/http"
 	"os"
 )

@@ -59,12 +59,13 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	//This part checks if user aready exists
 	var userExists User
+	database := AccessDataStore()
 	if database == nil {
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, "", []string{"Database is nil"}, 400)
 		return
 	}
-	database.DB("heroku_gwrf0w5w").C("Users").Find(bson.M{"$or": []bson.M{bson.M{"email": auth.Email}, bson.M{"phone": auth.Phone}}}).One(&userExists)
+	database.DB(DBNAME).C("Users").Find(bson.M{"$or": []bson.M{bson.M{"email": auth.Email}, bson.M{"phone": auth.Phone}}}).One(&userExists)
 	if userExists.Email != "" || userExists.Phone != "" { //if user is found, return error
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, "", []string{"User already exists"}, 400)
@@ -79,7 +80,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	user.Name = auth.Name
 	user.Email = auth.Email
 	user.Phone = auth.Phone
-	err = database.DB("heroku_gwrf0w5w").C("Users").Insert(user)
+	err = database.DB(DBNAME).C("Users").Insert(user)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error inserting user", err.Error()}, 500)
@@ -90,7 +91,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	//Hash password
 	passwd, _ := bcrypt.GenerateFromPassword([]byte(auth.Password), bcrypt.DefaultCost)
 	auth.Password = string(passwd)
-	err = database.DB("heroku_gwrf0w5w").C("Credentials").Insert(auth)
+	err = database.DB(DBNAME).C("Credentials").Insert(auth)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error inserting user", err.Error()}, 500)

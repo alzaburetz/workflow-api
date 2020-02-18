@@ -16,7 +16,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		WriteAnswer(&w, "", []string{"Couldn't read data from post form", "Expecing json"}, 400)
+		WriteAnswer(&w, "", []string{"Couldn't read data from post form", "Expecting json"}, 400)
 		return
 	}
 
@@ -29,7 +29,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var userExists UserAuth
 	var db = AccessDataStore()
 	defer db.Close()
-	db.DB("app").C("Credentials").Find(bson.M{"email": auth.Email}).One(&userExists)
+	db.DB(DBNAME).C("Credentials").Find(bson.M{"email": auth.Email}).One(&userExists)
 	if userExists.Email == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, "", []string{"Couldn't login", "User doesn't exist"}, 400)

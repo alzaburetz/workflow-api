@@ -16,7 +16,7 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		var user User
 		var database = AccessDataStore()
-		if err = database.DB("app").C("Users").Find(bson.M{"email": userKey}).One(&user); err != nil {
+		if err = database.DB(DBNAME).C("Users").Find(bson.M{"email": userKey}).One(&user); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			WriteAnswer(&w, "", []string{err.Error()}, 500)
 			return

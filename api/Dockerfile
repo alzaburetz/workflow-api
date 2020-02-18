@@ -8,6 +8,7 @@ WORKDIR /go/src/src/github.com/alzaburetz/workflow-api/api
 COPY . .
 
 RUN export PORT=3000
+RUN export DBNAME=heroku_gwrf0w5w
 
 RUN go get ./...
 
