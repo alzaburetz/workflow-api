@@ -24,7 +24,7 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	//var match = bson.M{"$match":and_operator}
 
-	if err := database.DB("app").C("Posts").Find(and_operator).One(&post_); err != nil {
+	if err := database.DB(DBNAME).C("Posts").Find(and_operator).One(&post_); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error getting post from database", err.Error()}, 500)
 		return
@@ -42,7 +42,7 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 		WriteAnswer(&w, nil, []string{"You are not the owner of the post"}, 401)
 		return
 	} else {
-		if err = database.DB("app").C("Posts").Remove(and_operator); err != nil {
+		if err = database.DB(DBNAME).C("Posts").Remove(and_operator); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			WriteAnswer(&w, nil, []string{"Database error", err.Error()}, 500)
 			return

@@ -30,7 +30,7 @@ func DeleteGroup(w http.ResponseWriter, r *http.Request) {
 
 	var group Group
 
-	iter := database.DB("app").C("Groups").Pipe([]bson.M{{"$match": bson.M{"$and": []bson.M{{"creator.email": email}, {"_id_": groupid}}}}}).Iter()
+	iter := database.DB(DBNAME).C("Groups").Pipe([]bson.M{{"$match": bson.M{"$and": []bson.M{{"creator.email": email}, {"_id_": groupid}}}}}).Iter()
 	var groupcount int
 	for iter.Next(&group) {
 		groupcount++
@@ -40,14 +40,14 @@ func DeleteGroup(w http.ResponseWriter, r *http.Request) {
 		WriteAnswer(&w, nil, []string{"You are not the owner"}, 401)
 		return
 	}
-	_, err = database.DB("app").C("Users").UpdateAll(bson.M{"_id_": bson.M{"$gte": 0}}, bson.M{"$pull": bson.M{"groups": groupid}})
+	_, err = database.DB(DBNAME).C("Users").UpdateAll(bson.M{"_id_": bson.M{"$gte": 0}}, bson.M{"$pull": bson.M{"groups": groupid}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{err.Error()}, 500)
 		return
 	}
 
-	if err = database.DB("app").C("Groups").Remove(bson.M{"_id_": groupid}); err != nil {
+	if err = database.DB(DBNAME).C("Groups").Remove(bson.M{"_id_": groupid}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error removing group", err.Error()}, 500)
 		return

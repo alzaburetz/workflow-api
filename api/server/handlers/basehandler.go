@@ -7,6 +7,11 @@ import (
 	"os"
 )
 
+var (
+	DBNAME = "heroku_gwrf0w5w"
+	DBUSER="admin"
+	DBPASSWORD="main123"
+)
 var database *mgo.Session
 
 type DataBase struct {
@@ -26,8 +31,8 @@ func InitDatabase(session *mgo.Session) {
 func CreateDatabaseInstance() {
 	dialinfo := &mgo.DialInfo{
 		Addrs:    []string{"ds163517.mlab.com:63517"},
-		Database: "heroku_gwrf0w5w",
-		Username: "admin",
+		Database: DBNAME,
+		Username: DBUSER,
 		Password: "main123",
 	}
 	var err error

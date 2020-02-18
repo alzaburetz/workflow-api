@@ -20,12 +20,12 @@ func GetGroup(w http.ResponseWriter, r *http.Request) {
 	var group Group
 	var database = AccessDataStore()
 	defer database.Close()
-	if err := database.DB("app").C("Groups").Find(bson.M{"_id_": idurl}).One(&group); err != nil {
+	if err := database.DB(DBNAME).C("Groups").Find(bson.M{"_id_": idurl}).One(&group); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Database error", "Error getting group from database", err.Error()}, 500)
 		return
 	}
-	if err = database.DB("app").C("Posts").Pipe([]bson.M{bson.M{"$match": bson.M{"group_id": idurl}}, bson.M{"$limit": 2}}).All(&group.Posts); err != nil {
+	if err = database.DB(DBNAME).C("Posts").Pipe([]bson.M{bson.M{"$match": bson.M{"group_id": idurl}}, bson.M{"$limit": 2}}).All(&group.Posts); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Database error", "Error getting posts from database", err.Error()}, 500)
 		return

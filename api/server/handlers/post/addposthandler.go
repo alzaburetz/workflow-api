@@ -44,7 +44,7 @@ func AddPost(w http.ResponseWriter, r *http.Request) {
 		WriteAnswer(&w, nil, []string{"Error getting token", err.Error()}, 500)
 		return
 	}
-	if err = database.DB("app").C("Users").Find(bson.M{"email": email}).One(&post.Author); err != nil {
+	if err = database.DB(DBNAME).C("Users").Find(bson.M{"email": email}).One(&post.Author); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Database error", "Error getting user", err.Error()}, 500)
 		return
@@ -52,10 +52,10 @@ func AddPost(w http.ResponseWriter, r *http.Request) {
 
 	post.GroupID = groupid
 	post.Timestamp = time.Now().Unix()
-	//count, _ := database.DB("app").C("Posts").Find(bson.M{"group_id":id}).Count()
+	//count, _ := database.DB(DBNAME).C("Posts").Find(bson.M{"group_id":id}).Count()
 	PostUUID := uuid.NewV4()
 	post.Id = PostUUID.String()
-	if err = database.DB("app").C("Posts").Insert(post); err != nil {
+	if err = database.DB(DBNAME).C("Posts").Insert(post); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error inserting data to the collection"}, 500)
 		return

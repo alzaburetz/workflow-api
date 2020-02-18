@@ -30,7 +30,7 @@ func EnterGroup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var usr User
-	err = database.DB("app").C("Users").Find(bson.M{"email": user}).One(&usr)
+	err = database.DB(DBNAME).C("Users").Find(bson.M{"email": user}).One(&usr)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error getting user", err.Error()}, 500)
@@ -43,14 +43,14 @@ func EnterGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.DB("app").C("Users").Update(bson.M{"email": user}, bson.M{"$addToSet": bson.M{"groups": idvar}})
+	err = database.DB(DBNAME).C("Users").Update(bson.M{"email": user}, bson.M{"$addToSet": bson.M{"groups": idvar}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updating user", err.Error()}, 500)
 		return
 	}
 
-	err = database.DB("app").C("Groups").Update(bson.M{"_id_": idvar}, bson.M{"$inc": bson.M{"usercount": 1}})
+	err = database.DB(DBNAME).C("Groups").Update(bson.M{"_id_": idvar}, bson.M{"$inc": bson.M{"usercount": 1}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updating group", err.Error()}, 500)

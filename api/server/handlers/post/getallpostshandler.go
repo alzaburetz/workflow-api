@@ -16,7 +16,7 @@ func GetAllPosts(w http.ResponseWriter, r *http.Request) {
 
 	var posts []Post
 
-	if err := database.DB("app").C("Posts").Find(bson.M{"group_id": group}).All(&posts); err != nil {
+	if err := database.DB(DBNAME).C("Posts").Find(bson.M{"group_id": group}).All(&posts); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error getting data from database", err.Error()}, 500)
 		return

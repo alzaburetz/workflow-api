@@ -40,7 +40,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	var current User
-	_ = db.DB("app").C("Users").Find(bson.M{"email": userKey}).One(&current)
+	_ = db.DB(DBNAME).C("Users").Find(bson.M{"email": userKey}).One(&current)
 
 	userUpdated.Id = current.Id
 	userUpdated.UserCreated = current.UserCreated
@@ -48,7 +48,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	// WriteAnswer(&w, current, []string{},200)
 	// return
 
-	err = db.DB("app").C("Users").Update(bson.M{"email": userKey}, userUpdated)
+	err = db.DB(DBNAME).C("Users").Update(bson.M{"email": userKey}, userUpdated)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, "", []string{"Error updating data in database", err.Error()}, 500)

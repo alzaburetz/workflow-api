@@ -11,7 +11,7 @@ func GetAllGroups(w http.ResponseWriter, r *http.Request) {
 	var database = AccessDataStore()
 	defer database.Close()
 
-	if err := database.DB("app").C("Groups").Find(nil).All(&groups); err != nil {
+	if err := database.DB(DBNAME).C("Groups").Find(nil).All(&groups); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error fetching data from database", err.Error()}, 500)
 		return

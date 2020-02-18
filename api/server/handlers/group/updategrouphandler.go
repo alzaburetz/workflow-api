@@ -38,7 +38,7 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
 	var database = AccessDataStore()
 	defer database.Close()
 
-	err = database.DB("app").C("Groups").Update(bson.M{"_id_": id}, bson.M{"$set": bson.D{{"name", group.Name}, {"description", group.Description}}})
+	err = database.DB(DBNAME).C("Groups").Update(bson.M{"_id_": id}, bson.M{"$set": bson.D{{"name", group.Name}, {"description", group.Description}}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updating document", err.Error()}, 500)
@@ -46,7 +46,7 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var updated Group
-	database.DB("app").C("Groups").Find(bson.M{"_id_": groupvar}).One(&updated)
+	database.DB(DBNAME).C("Groups").Find(bson.M{"_id_": groupvar}).One(&updated)
 
 	w.WriteHeader(http.StatusOK)
 	WriteAnswer(&w, updated, []string{}, 200)

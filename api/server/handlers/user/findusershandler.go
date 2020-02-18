@@ -27,7 +27,7 @@ func FindUsers(w http.ResponseWriter, r *http.Request) {
 	var db = AccessDataStore()
 	defer db.Close()
 
-	iter := db.DB("app").C("Users").Find(bson.M{"phone": bson.M{"$in": phones}}).Iter()
+	iter := db.DB(DBNAME).C("Users").Find(bson.M{"phone": bson.M{"$in": phones}}).Iter()
 	var founduser User
 	var foundUsers []User
 
@@ -38,7 +38,7 @@ func FindUsers(w http.ResponseWriter, r *http.Request) {
 	WriteAnswer(&w, foundUsers, []string{}, 200)
 	return
 
-	if err = db.DB("app").C("Users").Find(bson.M{"phone": bson.M{"$in": phones}}).All(&foundUsers); err != nil {
+	if err = db.DB(DBNAME).C("Users").Find(bson.M{"phone": bson.M{"$in": phones}}).All(&foundUsers); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, "", []string{"Error reading data from database", err.Error()}, 500)
 		return
