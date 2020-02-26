@@ -50,7 +50,7 @@ func ExitGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = database.DB(DBNAME).C("Groups").Update(bson.M{"_id_": muxvar}, bson.M{"$inc": bson.M{"usercount": -1}})
+	err = database.DB(DBNAME).C("Groups").Update(bson.M{"_id_": muxvar}, bson.M{"$inc": bson.M{"usercount": -1}, "$pull": bson.M{"members": user}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updating group", err.Error()}, 500)
