@@ -1,5 +1,0 @@
-package comments
-
-func ()  {
-	
-}
