@@ -9,18 +9,17 @@ import (
 
 //Gets user by token
 func GetUser(w http.ResponseWriter, r *http.Request) {
-	if err, userKey := CheckToken(r); err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		WriteAnswer(&w, err.Error(), []string{"Wrong token, try relogin"}, 403)
-	} else {
-		w.WriteHeader(http.StatusOK)
+	query, ok := r.URL.Query()["search"]
+	_, userKey := CheckToken(r)
 		var user User
 		var database = AccessDataStore()
-		if err = database.DB(DBNAME).C("Users").Find(bson.M{"email": userKey}).One(&user); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			WriteAnswer(&w, "", []string{err.Error()}, 500)
-			return
+		var find bson.M
+		if ok {
+			find = bson.M{"$or":[]bson.M{bson.M{"email":string(query[0])}, bson.M{"phone":string(query[0])}}}
+		} else {
+			find = bson.M{"email": userKey}
 		}
+		database.DB(DBNAME).C("Users").Find(find).One(&user)
+		w.WriteHeader(http.StatusOK)
 		WriteAnswer(&w, user, []string{}, 200)
-	}
 }
