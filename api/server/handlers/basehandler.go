@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	DBNAME = "heroku_gwrf0w5w"
-	DBUSER="admin"
-	DBPASSWORD="main123"
+	DBNAME     = "heroku_gwrf0w5w"
+	DBUSER     = "admin"
+	DBPASSWORD = "main123"
 )
 var database *mgo.Session
 

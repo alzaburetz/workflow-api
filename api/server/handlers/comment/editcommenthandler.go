@@ -31,7 +31,7 @@ func EditComment(w http.ResponseWriter, r *http.Request) {
 	var database = AccessDataStore()
 	defer database.Close()
 
-	if err = database.DB(DBNAME).C("Comments").Update(bson.M{"_id_":commentid}, bson.M{"$set":bson.M{"edited":time.Now().Unix(), "body":comment.Body}}); err != nil {
+	if err = database.DB(DBNAME).C("Comments").Update(bson.M{"_id_": commentid}, bson.M{"$set": bson.M{"edited": time.Now().Unix(), "body": comment.Body}}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updateing data in database", err.Error()}, 500)
 		return
@@ -39,6 +39,5 @@ func EditComment(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	WriteAnswer(&w, "Successfully updated comment", []string{}, 200)
-
 
 }

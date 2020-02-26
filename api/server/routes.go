@@ -2,11 +2,11 @@ package server
 
 import (
 	"encoding/json"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers/comment"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/group"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers/notification"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/post"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
-	. "github.com/alzaburetz/workflow-api/api/server/handlers/comment"
-	. "github.com/alzaburetz/workflow-api/api/server/handlers/notification"
 	. "github.com/alzaburetz/workflow-api/api/server/middleware"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -38,12 +38,13 @@ func CreateRouter() *mux.Router {
 	user.HandleFunc("/update", UpdateUser).Methods("PUT")
 	user.HandleFunc("/find", FindUsers).Methods("GET")
 	user.HandleFunc("/notifications", GetNotifications).Methods("GET")
-	user.HandleFunc("/notifications/update", UpdateNotifications).Methods("PUT","POST")
+	user.HandleFunc("/notifications/update", UpdateNotifications).Methods("PUT", "POST")
 
 	var group = api.PathPrefix("/groups").Subrouter()
 	group.HandleFunc("", GetAllGroups).Methods("GET")
 	group.HandleFunc("/create", CreateGroup).Methods("POST")
 	group.HandleFunc("/{id}", GetGroup).Methods("GET")
+	group.HandleFunc("/{id}/members", GetMembers).Methods("GET")
 	group.HandleFunc("/{id}/update", UpdateGroup).Methods("PUT")
 	group.HandleFunc("/{id}/enter", EnterGroup).Methods("POST")
 	group.HandleFunc("/{id}/exit", ExitGroup).Methods("POST")

@@ -11,7 +11,7 @@ import (
 
 func LikePost(w http.ResponseWriter, r *http.Request) {
 	var postid = mux.Vars(r)["post"]
-	_,  user := CheckToken(r)
+	_, user := CheckToken(r)
 
 	var database = AccessDataStore()
 	defer database.Close()
@@ -20,17 +20,16 @@ func LikePost(w http.ResponseWriter, r *http.Request) {
 
 	var arrOp string
 
-	database.DB(DBNAME).C("Posts").Find(bson.M{"_id_":postid}).One(&post)
+	database.DB(DBNAME).C("Posts").Find(bson.M{"_id_": postid}).One(&post)
 	if util.Contains(post.Likes, user) {
 		arrOp = "$pull"
 	} else {
 		arrOp = "$addToSet"
 	}
 
-
 	if err := database.DB(DBNAME).C("Posts").Update(bson.M{"_id_": postid}, bson.M{arrOp: bson.M{"likes": user}}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		WriteAnswer(&w, nil, []string{"Error liking post", err.Error()},500)
+		WriteAnswer(&w, nil, []string{"Error liking post", err.Error()}, 500)
 		return
 	}
 

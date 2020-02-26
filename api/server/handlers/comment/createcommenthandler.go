@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/notification"
+	. "github.com/alzaburetz/workflow-api/api/server/middleware"
 	"github.com/gorilla/mux"
 	uuid "github.com/satori/go.uuid"
 	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
-	. "github.com/alzaburetz/workflow-api/api/server/middleware"
 	"time"
 )
 
@@ -47,11 +47,11 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 	err, user := CheckToken(r)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		WriteAnswer(&w, nil, []string{"Error reading token", err.Error()},500)
+		WriteAnswer(&w, nil, []string{"Error reading token", err.Error()}, 500)
 		return
 	}
 
-	if err := database.DB(DBNAME).C("Users").Find(bson.M{"email":user}).One(&comment.Author); err != nil {
+	if err := database.DB(DBNAME).C("Users").Find(bson.M{"email": user}).One(&comment.Author); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error getting user from database", err.Error()}, 500)
 		return
@@ -73,7 +73,7 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = database.DB(DBNAME).C("Posts").Update(bson.M{"_id_":postid}, bson.M{"$inc":bson.M{"comments":1}}); err != nil {
+	if err = database.DB(DBNAME).C("Posts").Update(bson.M{"_id_": postid}, bson.M{"$inc": bson.M{"comments": 1}}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error updating record in the database", err.Error()}, 500)
 		return

@@ -15,7 +15,7 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 
 	var post Post
 	database.DB(DBNAME).C("Posts").Find(bson.M{"_id_": postid}).One(&post)
-	database.DB(DBNAME).C("Comments").Find(bson.M{"postid":postid}).All(&post.Comments)
+	database.DB(DBNAME).C("Comments").Find(bson.M{"postid": postid}).All(&post.Comments)
 
 	w.WriteHeader(http.StatusOK)
 	WriteAnswer(&w, post, []string{}, 200)

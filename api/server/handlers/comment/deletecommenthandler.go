@@ -13,7 +13,7 @@ func DeleteComment(w http.ResponseWriter, r *http.Request) {
 	var database = AccessDataStore()
 	defer database.Close()
 
-	if err := database.DB(DBNAME).C("Comments").Remove(bson.M{"_id_":commentid}); err != nil {
+	if err := database.DB(DBNAME).C("Comments").Remove(bson.M{"_id_": commentid}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		WriteAnswer(&w, nil, []string{"Error removing comment", err.Error()}, 500)
 		return

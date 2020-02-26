@@ -1,15 +1,17 @@
 package server
 
-import ("net/http"
-		"log"
-		"gopkg.in/mgo.v2")
+import (
+	"gopkg.in/mgo.v2"
+	"log"
+	"net/http"
+)
 
 type Server struct {
 	HTTP *http.Server
-	db *mgo.Session
+	db   *mgo.Session
 }
 
-func (s *Server)FileServerInit() {
+func (s *Server) FileServerInit() {
 	s.HTTP = CreateHttpServer()
 	s.InitDatabase()
 	log.Fatal(s.HTTP.ListenAndServe())
@@ -18,7 +20,7 @@ func (s *Server)FileServerInit() {
 
 func CreateHttpServer() *http.Server {
 	return &http.Server{
-		Addr: ":8080",
+		Addr:    ":8080",
 		Handler: CreateRouter(),
 	}
 }

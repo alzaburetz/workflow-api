@@ -26,7 +26,7 @@ func GetAllPosts(w http.ResponseWriter, r *http.Request) {
 
 	_, user := middleware.CheckToken(r)
 
-	for key,val := range posts {
+	for key, val := range posts {
 		posts[key].LikesCount = len(val.Likes)
 		posts[key].LikedByUser = util.Contains(val.Likes, user)
 	}

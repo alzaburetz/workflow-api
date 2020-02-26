@@ -14,15 +14,15 @@ func UpdateNotifications(w http.ResponseWriter, r *http.Request) {
 	var database = AccessDataStore()
 	defer database.Close()
 
-	var createdfilter = bson.M{"created": bson.M{"$lt":time.Now().Unix()}}
-	var userfilter = bson.M{"useremail":user}
+	var createdfilter = bson.M{"created": bson.M{"$lt": time.Now().Unix()}}
+	var userfilter = bson.M{"useremail": user}
 
-	var filter = bson.M{"$and":[]bson.M{createdfilter, userfilter}}
+	var filter = bson.M{"$and": []bson.M{createdfilter, userfilter}}
 
-	_, err := database.DB(DBNAME).C("Notifications").UpdateAll(filter, bson.M{"$set":bson.M{"seen":true}})
+	_, err := database.DB(DBNAME).C("Notifications").UpdateAll(filter, bson.M{"$set": bson.M{"seen": true}})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		WriteAnswer(&w, nil,[]string{"Error updating resords", err.Error()}, 500)
+		WriteAnswer(&w, nil, []string{"Error updating resords", err.Error()}, 500)
 		return
 	}
 
