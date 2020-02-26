@@ -5,6 +5,8 @@ import (
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/group"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/post"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers/comment"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers/notification"
 	. "github.com/alzaburetz/workflow-api/api/server/middleware"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -35,6 +37,8 @@ func CreateRouter() *mux.Router {
 	user.HandleFunc("/login", Login).Methods("POST")
 	user.HandleFunc("/update", UpdateUser).Methods("PUT")
 	user.HandleFunc("/find", FindUsers).Methods("GET")
+	user.HandleFunc("/notifications", GetNotifications).Methods("GET")
+	user.HandleFunc("/notifications/update", UpdateNotifications).Methods("PUT","POST")
 
 	var group = api.PathPrefix("/groups").Subrouter()
 	group.HandleFunc("", GetAllGroups).Methods("GET")
@@ -48,7 +52,15 @@ func CreateRouter() *mux.Router {
 	var posts = group.PathPrefix("/{id}/posts").Subrouter()
 	posts.HandleFunc("", GetAllPosts).Methods("GET")
 	posts.HandleFunc("/add", AddPost).Methods("POST")
+	posts.HandleFunc("/{post}", GetPost).Methods("GET")
 	posts.HandleFunc("/{post}/delete", DeletePost).Methods("DELETE")
+	posts.HandleFunc("/{post}/like", LikePost).Methods("PUT")
+
+	var comments = posts.PathPrefix("/{post}/comments").Subrouter()
+	comments.HandleFunc("", GetAllComments).Methods("GET")
+	comments.HandleFunc("/add", CreateComment).Methods("POST")
+	comments.HandleFunc("/{comment}/edit", EditComment).Methods("PUT")
+	comments.HandleFunc("/{comment}/delete", DeleteComment).Methods("DELETE")
 
 	// var admin = r.PathPrefix("/admin").Subrouter()
 	// admin.HandleFunc("/wipe/{name}", DropDB)
