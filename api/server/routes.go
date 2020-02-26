@@ -42,6 +42,7 @@ func CreateRouter() *mux.Router {
 
 	var group = api.PathPrefix("/groups").Subrouter()
 	group.HandleFunc("", GetAllGroups).Methods("GET")
+	group.HandleFunc("/get", GetUserGroups).Methods("GET")
 	group.HandleFunc("/create", CreateGroup).Methods("POST")
 	group.HandleFunc("/{id}", GetGroup).Methods("GET")
 	group.HandleFunc("/{id}/members", GetMembers).Methods("GET")
