@@ -3,6 +3,7 @@ package server
 import (
 	"crypto/tls"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	"github.com/alzaburetz/workflow-api/api/server/handlers/user/password"
 	"gopkg.in/mgo.v2"
 	"net/http"
 	"time"
@@ -16,6 +17,7 @@ type Server struct {
 func (s *Server) ServerNew() {
 	s.HTTP = CreateHTTPServer()
 	CreateDatabaseInstance()
+	password.CodeStorageInit()
 }
 
 func CreateHTTPServer() *http.Server {
