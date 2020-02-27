@@ -7,6 +7,7 @@ import (
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/notification"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/post"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
+	. "github.com/alzaburetz/workflow-api/api/server/handlers/user/password"
 	. "github.com/alzaburetz/workflow-api/api/server/middleware"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -39,6 +40,9 @@ func CreateRouter() *mux.Router {
 	user.HandleFunc("/find", FindUsers).Methods("GET")
 	user.HandleFunc("/notifications", GetNotifications).Methods("GET")
 	user.HandleFunc("/notifications/update", UpdateNotifications).Methods("PUT", "POST")
+	user.HandleFunc("/password/reset", ResetPassword).Methods("GET")
+	user.HandleFunc("/password/checkcode", CheckCode).Methods("GET")
+	user.HandleFunc("/password/set", SetPassword).Methods("POST", "PUT")
 
 	var group = api.PathPrefix("/groups").Subrouter()
 	group.HandleFunc("", GetAllGroups).Methods("GET")
