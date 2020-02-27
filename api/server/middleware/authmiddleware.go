@@ -67,7 +67,7 @@ func AccessRedis() (redis.Conn, error) {
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/api/user/login" || r.URL.Path == "/api/user/register" {
+		if r.URL.Path == "/api/user/login" || r.URL.Path == "/api/user/register" || r.URL.Path == "/api/user/password/reset" || r.URL.Path == "/api/user/password/set" || r.URL.Path == "/api/user/password/checkcode"{
 			next.ServeHTTP(w, r)
 			return
 		}
