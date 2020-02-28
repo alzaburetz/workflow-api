@@ -3,6 +3,8 @@ package middleware
 import (
 	"errors"
 	"net/http"
+	"os"
+
 	//"time"
 	"fmt"
 	"github.com/gomodule/redigo/redis"
@@ -57,7 +59,7 @@ func CheckToken(r *http.Request) (error, string) {
 }
 
 func AccessRedis() (redis.Conn, error) {
-	con, err := redis.DialURL("redis://redistogo:c7ec584512cad0331e2d71355fadb333@pike.redistogo.com:10201/")
+	con, err := redis.DialURL(os.Getenv("REDIS"))
 	if err != nil {
 		log.Println(err.Error())
 		return nil, err
