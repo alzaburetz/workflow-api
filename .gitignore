@@ -5,3 +5,5 @@ api/https-server.crt
 .idea/
 api/static/*
 api/.vscode/*
+api
+api/build.sh
