@@ -8,9 +8,10 @@ import (
 )
 
 var (
-	DBNAME     = "heroku_gwrf0w5w"
-	DBUSER     = "admin"
-	DBPASSWORD = "main123"
+	DBNAME string
+	DBUSER string
+	DBPASSWORD string
+	DBADDR string
 )
 var database *mgo.Session
 
@@ -29,11 +30,15 @@ func InitDatabase(session *mgo.Session) {
 }
 
 func CreateDatabaseInstance() {
+	DBNAME = os.Getenv("DBNAME")
+	DBUSER = os.Getenv("DBUSER")
+	DBPASSWORD = os.Getenv("DBPASSWORD")
+	DBADDR = os.Getenv("DBADDR")
 	dialinfo := &mgo.DialInfo{
-		Addrs:    []string{"ds163517.mlab.com:63517"},
+		Addrs:    []string{DBADDR},
 		Database: DBNAME,
 		Username: DBUSER,
-		Password: "main123",
+		Password: DBPASSWORD,
 	}
 	var err error
 
