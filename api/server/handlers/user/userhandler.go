@@ -13,6 +13,7 @@ type User struct {
 	Weekdays     int      `json:"weekdays" bson:"weekdays"`
 	FirstWorkDay string   `json:"firstwork" bson:"firstwork"`
 	UserCreated  int64    `json:"-" bson:"created"`
+	Avatar		 string   `json:"avatar" bson:"avatar"`
 	Email        string   `json:"email" bson:"email"`
 	Phone        string   `json:"phone" bson:"phone"`
 	Groups       []string `json:"groups" bson:"groups"`
