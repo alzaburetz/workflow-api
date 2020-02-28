@@ -7,6 +7,7 @@ import (
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/notification"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/post"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/user"
+	"github.com/alzaburetz/workflow-api/api/server/handlers/user/filehandlers"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/user/password"
 	. "github.com/alzaburetz/workflow-api/api/server/middleware"
 	"github.com/gorilla/mux"
@@ -35,6 +36,7 @@ func CreateRouter() *mux.Router {
 	var user = api.PathPrefix("/user").Subrouter()
 	user.HandleFunc("", GetUser).Methods("GET")
 	user.HandleFunc("/register", RegisterUser).Methods("POST")
+	user.HandleFunc("/avatar", filehandlers.UploadAvatar).Methods("POST")
 	user.HandleFunc("/login", Login).Methods("POST")
 	user.HandleFunc("/update", UpdateUser).Methods("PUT")
 	user.HandleFunc("/find", FindUsers).Methods("GET")
