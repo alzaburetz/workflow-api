@@ -3,9 +3,11 @@ package user
 import (
 	"encoding/json"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	uuid "github.com/satori/go.uuid"
 	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 func AddUser(w http.ResponseWriter, r *http.Request) {
@@ -40,6 +42,9 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 		WriteAnswer(&w, nil, []string{"User already exists"}, 400)
 		return
 	}
+
+	user.Id = uuid.NewV4().String()
+	user.UserCreated = time.Now().Unix()
 
 	if err = database.DB(DBNAME).C("Users").Insert(user); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
