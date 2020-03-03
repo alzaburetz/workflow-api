@@ -2,7 +2,6 @@ package user
 
 import (
 	"encoding/json"
-	"fmt"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers"
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -65,13 +64,18 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		WriteAnswer(&w, "", []string{"Database is nil"}, 400)
 		return
 	}
-	database.DB(DBNAME).C("Users").Find(bson.M{"$or": []bson.M{bson.M{"email": auth.Email}, bson.M{"phone": auth.Phone}}}).One(&userExists)
+	database.DB(DBNAME).C("Credentials").Find(bson.M{"$or": []bson.M{bson.M{"email": auth.Email}, bson.M{"phone": auth.Phone}}}).One(&userExists)
 	if userExists.Email != "" || userExists.Phone != "" { //if user is found, return error
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, "", []string{"User already exists"}, 400)
 		return
 	}
-	fmt.Println("User inserted")
+
+	database.DB(DBNAME).C("Users").Find(bson.M{"$or": []bson.M{bson.M{"email": auth.Email}, bson.M{"phone": auth.Phone}}}).One(&userExists)
+	if userExists.Email == auth.Email {
+		var set = bson.M{"$set": bson.M{"email":auth.Email, "name":auth.Name, "phone":auth.Phone}}
+		database.DB(DBNAME).C("Users").Update(bson.M{"$or": []bson.M{{"email":auth.Email}, {"phone":auth.Phone}}}, set)
+	}
 	token := uuid.NewV4()
 
 	var user User
