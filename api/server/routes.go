@@ -35,6 +35,7 @@ func CreateRouter() *mux.Router {
 
 	var user = api.PathPrefix("/user").Subrouter()
 	user.HandleFunc("", GetUser).Methods("GET")
+	user.HandleFunc("/add", AddUser).Methods("POST")
 	user.HandleFunc("/register", RegisterUser).Methods("POST")
 	user.HandleFunc("/avatar", filehandlers.UploadAvatar).Methods("POST")
 	user.HandleFunc("/login", Login).Methods("POST")
