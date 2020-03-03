@@ -29,7 +29,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var userExists UserAuth
 	var db = AccessDataStore()
 	defer db.Close()
-	db.DB(DBNAME).C("Credentials").Find(bson.M{"email": auth.Email}).One(&userExists)
+	db.DB(DBNAME).C("Credentials").Find(bson.M{"$or": []bson.M{{"email": auth.Email}, {"phone":auth.Phone}}}).One(&userExists)
 	if userExists.Email == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, "", []string{"Couldn't login", "User doesn't exist"}, 400)
