@@ -54,11 +54,11 @@ func AccessDataStore() *mgo.Session {
 	return database.Copy()
 }
 
-func WriteAnswer(w *http.ResponseWriter, msg interface{}, httperrors []string, code int) error {
+func WriteAnswer(w *http.ResponseWriter, msg interface{}, httperrors []string, code int)  {
 	var response = Resp{
 		Code:     code,
 		Errors:   httperrors,
 		Response: msg,
 	}
-	return json.NewEncoder(*w).Encode(response)
+	 json.NewEncoder(*w).Encode(response)
 }
