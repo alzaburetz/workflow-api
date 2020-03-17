@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers"
 	. "github.com/alzaburetz/workflow-api/api/server/middleware"
+	_ "github.com/alzaburetz/workflow-api/api/server/handlers/user/filehandlers"
 	"github.com/gorilla/mux"
 	"github.com/satori/go.uuid"
 	"gopkg.in/mgo.v2/bson"
@@ -23,10 +24,19 @@ func AddPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = json.Unmarshal(body, &post); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		WriteAnswer(&w, nil, []string{"Error reading json", err.Error()}, 400)
-		return
+	if r.Header.Get("Content-Type") == "application/json" {
+		if err = json.Unmarshal(body, &post); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			WriteAnswer(&w, nil, []string{"Error reading json", err.Error()}, 400)
+			return
+		}
+	} else {
+		var field = r.FormValue("post")
+		if err = json.Unmarshal([]byte(field), &post); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			WriteAnswer(&w, nil, []string{"Error reading json", err.Error()}, 400)
+			return
+		}
 	}
 
 	if err = post.HasRequiredFields(); err != nil {
