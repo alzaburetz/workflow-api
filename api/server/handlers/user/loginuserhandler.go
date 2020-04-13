@@ -42,7 +42,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		WriteAnswer(&w, "", []string{"Password is incorrect"}, 401)
 		return
 	} else {
-		token, err := CreateToken(auth.Email)
+		token, err := CreateToken(userExists.Email)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			WriteAnswer(&w, "", []string{"Error creating token, aborting", err.Error()}, 500)
