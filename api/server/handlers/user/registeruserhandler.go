@@ -2,13 +2,14 @@ package user
 
 import (
 	"encoding/json"
-	. "github.com/alzaburetz/workflow-api/api/server/handlers"
-	"github.com/satori/go.uuid"
-	"golang.org/x/crypto/bcrypt"
-	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	uuid "github.com/satori/go.uuid"
+	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/mgo.v2/bson"
 )
 
 //Handle register
@@ -73,8 +74,8 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	database.DB(DBNAME).C("Users").Find(bson.M{"$or": []bson.M{bson.M{"email": auth.Email}, bson.M{"phone": auth.Phone}}}).One(&userExists)
 	if userExists.Email == auth.Email {
-		var set = bson.M{"$set": bson.M{"email":auth.Email, "name":auth.Name, "phone":auth.Phone}}
-		database.DB(DBNAME).C("Users").Update(bson.M{"$or": []bson.M{{"email":auth.Email}, {"phone":auth.Phone}}}, set)
+		var set = bson.M{"$set": bson.M{"email": auth.Email, "name": auth.Name, "phone": auth.Phone, "surname": auth.Surname}}
+		database.DB(DBNAME).C("Users").Update(bson.M{"$or": []bson.M{{"email": auth.Email}, {"phone": auth.Phone}}}, set)
 	}
 	token := uuid.NewV4()
 
