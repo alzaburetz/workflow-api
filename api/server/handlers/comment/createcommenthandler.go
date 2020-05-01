@@ -1,6 +1,7 @@
 package comment
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -69,6 +70,7 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 		notification.Created = time.Now().Unix()
 		notification.UserEmail = comment.At.Email
 		database.DB(DBNAME).C("Notifications").Insert(notification)
+		go SendNotification(comment.At.PushToken, "Ответ на коментарий", comment.Body)
 	}
 
 	if err = database.DB(DBNAME).C("Comments").Insert(comment); err != nil {
@@ -85,4 +87,13 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	WriteAnswer(&w, "Successfully inserted data", []string{}, 200)
+}
+
+func SendNotification(push, title, body string) {
+	request, _ := json.Marshal(map[string]string{
+		"title": title,
+		"body":  body,
+		"token": push,
+	})
+	_, _ = http.Post(GetPushService(), "application/json", bytes.NewBuffer(request))
 }
