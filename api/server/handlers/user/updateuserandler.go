@@ -2,11 +2,14 @@ package user
 
 import (
 	"encoding/json"
-	. "github.com/alzaburetz/workflow-api/api/server/handlers"
-	. "github.com/alzaburetz/workflow-api/api/server/middleware"
-	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
+	"time"
+
+	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	. "github.com/alzaburetz/workflow-api/api/server/middleware"
+	"github.com/alzaburetz/workflow-api/api/util"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
@@ -44,6 +47,10 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	userUpdated.Id = current.Id
 	userUpdated.UserCreated = current.UserCreated
+
+	if len(current.Schedule) == 0 {
+		userUpdated.Schedule = util.CalculateCalendar(time.Unix(userUpdated.FirstWorkDay, 0), userUpdated.Workdays, userUpdated.Weekdays)
+	}
 
 	// WriteAnswer(&w, current, []string{},200)
 	// return
