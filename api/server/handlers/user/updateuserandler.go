@@ -47,6 +47,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	userUpdated.Id = current.Id
 	userUpdated.UserCreated = current.UserCreated
+	userUpdated.Schedule = current.Schedule
 
 	if len(current.Schedule) == 0 {
 		userUpdated.Schedule = util.CalculateCalendar(time.Unix(userUpdated.FirstWorkDay, 0), userUpdated.Workdays, userUpdated.Weekdays)
