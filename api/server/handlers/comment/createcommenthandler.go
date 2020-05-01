@@ -2,15 +2,16 @@ package comment
 
 import (
 	"encoding/json"
+	"io/ioutil"
+	"net/http"
+	"time"
+
 	. "github.com/alzaburetz/workflow-api/api/server/handlers"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/notification"
 	. "github.com/alzaburetz/workflow-api/api/server/middleware"
 	"github.com/gorilla/mux"
 	uuid "github.com/satori/go.uuid"
 	"gopkg.in/mgo.v2/bson"
-	"io/ioutil"
-	"net/http"
-	"time"
 )
 
 func CreateComment(w http.ResponseWriter, r *http.Request) {
@@ -56,6 +57,9 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 		WriteAnswer(&w, nil, []string{"Error getting user from database", err.Error()}, 500)
 		return
 	}
+
+	comment.Author.Schedule = nil
+	comment.Author.Groups = nil
 
 	if len(comment.At.Email) > 0 {
 		var notification Notification

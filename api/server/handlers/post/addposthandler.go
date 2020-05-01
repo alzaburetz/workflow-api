@@ -2,15 +2,16 @@ package post
 
 import (
 	"encoding/json"
-	. "github.com/alzaburetz/workflow-api/api/server/handlers"
-	. "github.com/alzaburetz/workflow-api/api/server/middleware"
-	_ "github.com/alzaburetz/workflow-api/api/server/handlers/user/filehandlers"
-	"github.com/gorilla/mux"
-	"github.com/satori/go.uuid"
-	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	_ "github.com/alzaburetz/workflow-api/api/server/handlers/user/filehandlers"
+	. "github.com/alzaburetz/workflow-api/api/server/middleware"
+	"github.com/gorilla/mux"
+	uuid "github.com/satori/go.uuid"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func AddPost(w http.ResponseWriter, r *http.Request) {
@@ -59,6 +60,8 @@ func AddPost(w http.ResponseWriter, r *http.Request) {
 		WriteAnswer(&w, nil, []string{"Database error", "Error getting user", err.Error()}, 500)
 		return
 	}
+	post.Author.Schedule = nil
+	post.Author.Groups = nil
 
 	post.GroupID = groupid
 	post.Timestamp = time.Now().Unix()
