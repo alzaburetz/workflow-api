@@ -20,6 +20,7 @@ type User struct {
 	Phone        string             `json:"phone" bson:"phone"`
 	Groups       []string           `json:"groups" bson:"groups"`
 	Schedule     []util.CalendarDay `json:"schedule" bson:"schedule"`
+	PushToken    string             `json:"push_token" bson:"push_token"`
 }
 
 type UserAuth struct {
