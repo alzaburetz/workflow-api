@@ -2,16 +2,17 @@ package handlers
 
 import (
 	"encoding/json"
-	"gopkg.in/mgo.v2"
 	"net/http"
 	"os"
+
+	"gopkg.in/mgo.v2"
 )
 
 var (
-	DBNAME string
-	DBUSER string
+	DBNAME     string
+	DBUSER     string
 	DBPASSWORD string
-	DBADDR string
+	DBADDR     string
 )
 var database *mgo.Session
 
@@ -27,6 +28,10 @@ type Resp struct {
 
 func InitDatabase(session *mgo.Session) {
 	database = session
+}
+
+func GetPushService() string {
+	return os.Getenv("FIREBASE")
 }
 
 func CreateDatabaseInstance() {
@@ -54,11 +59,11 @@ func AccessDataStore() *mgo.Session {
 	return database.Copy()
 }
 
-func WriteAnswer(w *http.ResponseWriter, msg interface{}, httperrors []string, code int)  {
+func WriteAnswer(w *http.ResponseWriter, msg interface{}, httperrors []string, code int) {
 	var response = Resp{
 		Code:     code,
 		Errors:   httperrors,
 		Response: msg,
 	}
-	 json.NewEncoder(*w).Encode(response)
+	json.NewEncoder(*w).Encode(response)
 }
