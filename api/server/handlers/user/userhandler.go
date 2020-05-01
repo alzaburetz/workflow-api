@@ -13,7 +13,7 @@ type User struct {
 	Weekdays     int      `json:"weekdays" bson:"weekdays"`
 	FirstWorkDay string   `json:"firstwork" bson:"firstwork"`
 	UserCreated  int64    `json:"-" bson:"created"`
-	Avatar		 string   `json:"avatar" bson:"avatar"`
+	Avatar       string   `json:"avatar" bson:"avatar"`
 	Email        string   `json:"email" bson:"email"`
 	Phone        string   `json:"phone" bson:"phone"`
 	Groups       []string `json:"groups" bson:"groups"`
@@ -23,6 +23,7 @@ type UserAuth struct {
 	Email    string `json:"email" bson:"email"`
 	Phone    string `json:"phone" bson:"phone"`
 	Name     string `json:"name" bson:"name"`
+	Surname  string `json:"surname" bson:"surname"`
 	Password string `json:"password" bson:"password"`
 }
 
