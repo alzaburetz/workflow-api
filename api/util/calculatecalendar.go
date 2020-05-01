@@ -10,6 +10,7 @@ type CalendarDay struct {
 	Dayofweek int   `json:"day_of_week" bson:"day_of_week"`
 	Works     bool  `json:"works" bson:"works"`
 	Timestamp int64 `json:"-" bson:"timestamp"`
+	Month     int   `json:"month" bson:"month"`
 }
 
 var firstwork time.Time
@@ -31,6 +32,7 @@ func CalculateCalendar(start time.Time, workdays int, weekdays int) []CalendarDa
 		day.Day = date.Day()
 		day.Dayofweek = (int)(date.Weekday())
 		day.Timestamp = date.Unix()
+		day.Month = (int)(date.Month())
 		day.Works = workday(date, workdays, weekdays)
 		calendr = append(calendr, day)
 		i++
