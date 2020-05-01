@@ -3,20 +3,23 @@ package user
 import (
 	"errors"
 	"strings"
+
+	"github.com/alzaburetz/workflow-api/api/util"
 )
 
 type User struct {
-	Id           string   `json:"-" bson:"_id_"`
-	Name         string   `json:"name" bson:"name"`
-	Surname      string   `json:"surname" bson:"surname"`
-	Workdays     int      `json:"workdays" bson:"workdays"`
-	Weekdays     int      `json:"weekdays" bson:"weekdays"`
-	FirstWorkDay string   `json:"firstwork" bson:"firstwork"`
-	UserCreated  int64    `json:"-" bson:"created"`
-	Avatar       string   `json:"avatar" bson:"avatar"`
-	Email        string   `json:"email" bson:"email"`
-	Phone        string   `json:"phone" bson:"phone"`
-	Groups       []string `json:"groups" bson:"groups"`
+	Id           string             `json:"-" bson:"_id_"`
+	Name         string             `json:"name" bson:"name"`
+	Surname      string             `json:"surname" bson:"surname"`
+	Workdays     int                `json:"workdays" bson:"workdays"`
+	Weekdays     int                `json:"weekdays" bson:"weekdays"`
+	FirstWorkDay int64              `json:"firstwork" bson:"firstwork"`
+	UserCreated  int64              `json:"-" bson:"created"`
+	Avatar       string             `json:"avatar" bson:"avatar"`
+	Email        string             `json:"email" bson:"email"`
+	Phone        string             `json:"phone" bson:"phone"`
+	Groups       []string           `json:"groups" bson:"groups"`
+	Schedule     []util.CalendarDay `json:"schedule" bson:"schedule"`
 }
 
 type UserAuth struct {
