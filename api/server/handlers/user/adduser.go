@@ -2,12 +2,14 @@ package user
 
 import (
 	"encoding/json"
-	. "github.com/alzaburetz/workflow-api/api/server/handlers"
-	uuid "github.com/satori/go.uuid"
-	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	. "github.com/alzaburetz/workflow-api/api/server/handlers"
+	"github.com/alzaburetz/workflow-api/api/util"
+	uuid "github.com/satori/go.uuid"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func AddUser(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +29,7 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 
 	if err = user.HasRequiredFields(); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		WriteAnswer(&w, nil, []string{"Error reading user object", "Missing data",err.Error()},400)
+		WriteAnswer(&w, nil, []string{"Error reading user object", "Missing data", err.Error()}, 400)
 		return
 	}
 
@@ -35,9 +37,9 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	defer database.Close()
 
 	var checkuser User
-	database.DB(DBNAME).C("Users").Find(bson.M{"$or":[]bson.M{{"email":user.Email}, {"phone":user.Phone}}}).One(&checkuser)
+	database.DB(DBNAME).C("Users").Find(bson.M{"$or": []bson.M{{"email": user.Email}, {"phone": user.Phone}}}).One(&checkuser)
 
-	if checkuser.Email == user.Email || checkuser.Phone == user.Phone{
+	if checkuser.Email == user.Email || checkuser.Phone == user.Phone {
 		w.WriteHeader(http.StatusBadRequest)
 		WriteAnswer(&w, nil, []string{"User already exists"}, 400)
 		return
@@ -45,6 +47,7 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 
 	user.Id = uuid.NewV4().String()
 	user.UserCreated = time.Now().Unix()
+	user.Schedule = util.CalculateCalendar(time.Unix(user.FirstWorkDay, 0), user.Workdays, user.Weekdays)
 
 	if err = database.DB(DBNAME).C("Users").Insert(user); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
