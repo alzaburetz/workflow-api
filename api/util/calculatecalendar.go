@@ -6,11 +6,12 @@ import (
 )
 
 type CalendarDay struct {
-	Day       int   `json:"day" bson:"day"`
-	Dayofweek int   `json:"day_of_week" bson:"day_of_week"`
-	Works     bool  `json:"works" bson:"works"`
-	Timestamp int64 `json:"-" bson:"timestamp"`
-	Month     int   `json:"month" bson:"month"`
+	Day       int    `json:"day" bson:"day"`
+	Dayofweek int    `json:"day_of_week" bson:"day_of_week"`
+	Works     bool   `json:"works" bson:"works"`
+	Timestamp int64  `json:"-" bson:"timestamp"`
+	Month     int    `json:"month" bson:"month"`
+	Note      string `json:"note" bson:"note"`
 }
 
 var firstwork time.Time
