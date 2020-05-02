@@ -2,6 +2,8 @@ package server
 
 import (
 	"encoding/json"
+	"net/http"
+
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/comment"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/group"
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/notification"
@@ -11,7 +13,6 @@ import (
 	. "github.com/alzaburetz/workflow-api/api/server/handlers/user/password"
 	. "github.com/alzaburetz/workflow-api/api/server/middleware"
 	"github.com/gorilla/mux"
-	"net/http"
 )
 
 var r *mux.Router
@@ -40,7 +41,7 @@ func CreateRouter() *mux.Router {
 	user.HandleFunc("/avatar", filehandlers.UploadAvatar).Methods("POST")
 	user.HandleFunc("/login", Login).Methods("POST")
 	user.HandleFunc("/update", UpdateUser).Methods("PUT")
-	user.HandleFunc("/find", FindUsers).Methods("GET")
+	user.HandleFunc("/find", FindUsers).Methods("GET", "POST")
 	user.HandleFunc("/notifications", GetNotifications).Methods("GET")
 	user.HandleFunc("/notifications/update", UpdateNotifications).Methods("PUT", "POST")
 	user.HandleFunc("/password/reset", ResetPassword).Methods("GET")
