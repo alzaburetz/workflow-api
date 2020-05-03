@@ -86,7 +86,7 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	WriteAnswer(&w, "Successfully inserted data", []string{}, 200)
+	WriteAnswer(&w, comment, []string{}, 200)
 }
 
 func SendNotification(push, title, body string) {
