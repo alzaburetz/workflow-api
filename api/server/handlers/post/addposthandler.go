@@ -25,20 +25,11 @@ func AddPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.Header.Get("Content-Type") == "application/json" {
 		if err = json.Unmarshal(body, &post); err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			WriteAnswer(&w, nil, []string{"Error reading json", err.Error()}, 400)
 			return
 		}
-	} else {
-		var field = r.FormValue("post")
-		if err = json.Unmarshal([]byte(field), &post); err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			WriteAnswer(&w, nil, []string{"Error reading json", err.Error()}, 400)
-			return
-		}
-	}
 
 	if err = post.HasRequiredFields(); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
